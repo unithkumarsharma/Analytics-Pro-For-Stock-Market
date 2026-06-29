@@ -24,24 +24,8 @@ export const IndexCard: React.FC<IndexCardProps> = ({
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay }}
-      className="glass-card group relative overflow-hidden p-5"
+      className="glass-card p-5"
     >
-      {/* Top accent line */}
-      <div
-        className="absolute top-0 left-0 right-0 h-[2px]"
-        style={{
-          background: `linear-gradient(90deg, ${accentColor}, transparent)`,
-        }}
-      />
-
-      {/* Glow on hover */}
-      <div
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-xl"
-        style={{
-          background: `radial-gradient(circle at 50% 80%, ${accentColor}08, transparent 70%)`,
-        }}
-      />
-
       <div className="relative z-10">
         {/* Header */}
         <div className="flex items-center justify-between mb-3">

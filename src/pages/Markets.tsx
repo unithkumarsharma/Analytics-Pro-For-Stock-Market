@@ -14,7 +14,7 @@ import {
 } from 'recharts';
 import { TableSkeleton } from '../components/ui/Skeleton';
 import { stockQuotes, marketIndices, sectorPerformance } from '../data/mockData';
-import { formatNumber, formatPercent, getChangeColor, generateSparkline } from '../utils/formatters';
+import { formatNumber, formatPercent, getChangeColor } from '../utils/formatters';
 
 const Markets: React.FC = () => {
   const [loading, setLoading] = useState(true);

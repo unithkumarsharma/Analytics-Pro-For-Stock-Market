@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   Binary,
   TrendingUp,
@@ -7,17 +7,11 @@ import {
   Activity,
   Award,
   SlidersHorizontal,
-  ChevronDown,
   Info,
-  ShieldAlert,
-  ArrowUpRight,
-  ArrowDownRight,
   TrendingDown,
   Sparkles,
 } from 'lucide-react';
 import {
-  AreaChart,
-  Area,
   XAxis,
   YAxis,
   Tooltip,
@@ -27,18 +21,15 @@ import {
   CartesianGrid,
   Legend,
   ReferenceLine,
-  Cell,
   LineChart,
   Line,
 } from 'recharts';
 import { DashboardSkeleton } from '../components/ui/Skeleton';
 import { optionsChain } from '../data/mockData';
-import { formatNumber } from '../utils/formatters';
 import {
   getEnrichedOptionChain,
   calculateMaxPain,
   calculateSupportResistance,
-  OptionChainItem,
 } from '../utils/optionsAnalytics';
 
 // Custom Tooltip component for Option Chain charts

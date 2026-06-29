@@ -1,4 +1,4 @@
-import { OptionChain } from '../types';
+import type { OptionChain } from '../types';
 
 export interface OptionGreeks {
   delta: number;

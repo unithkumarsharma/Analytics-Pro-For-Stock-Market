@@ -1,12 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-interface ShortcutMapping {
-  keys: string[];
-  action: () => void;
-  description: string;
-}
-
 export function useKeyboardShortcuts(onToggleHelper: () => void) {
   const navigate = useNavigate();
 

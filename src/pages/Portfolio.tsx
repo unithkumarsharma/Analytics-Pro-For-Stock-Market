@@ -9,7 +9,6 @@ import {
   BarChart3,
   Target,
   Shield,
-  Activity,
   Zap,
   Download,
   FileText,
@@ -19,7 +18,6 @@ import {
   Calendar,
   AlertTriangle,
   Award,
-  Percent,
   Layers,
 } from 'lucide-react';
 import {
@@ -35,12 +33,9 @@ import {
   Pie,
   Cell,
   CartesianGrid,
-  ComposedChart,
-  Line,
   ReferenceLine,
 } from 'recharts';
 import { DashboardSkeleton } from '../components/ui/Skeleton';
-import { AnimatedCounter } from '../components/ui/AnimatedCounter';
 import { portfolioHoldings } from '../data/mockData';
 import { formatNumber, formatPercent, getChangeColor } from '../utils/formatters';
 import {
@@ -1016,7 +1011,7 @@ const Portfolio: React.FC = () => {
                     let currentStart = '';
                     let currentMin = 0;
 
-                    drawdownData.forEach((d, i) => {
+                    drawdownData.forEach((d) => {
                       if (d.drawdown < -0.5 && !currentStart) {
                         currentStart = d.date;
                         currentMin = d.drawdown;

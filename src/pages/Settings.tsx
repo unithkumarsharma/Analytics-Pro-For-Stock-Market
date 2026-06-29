@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
-  Settings as SettingsIcon,
   User,
   Bell,
   Shield,
@@ -9,11 +8,14 @@ import {
   Globe,
   Database,
   Check,
-  Zap,
+  LogOut,
 } from 'lucide-react';
 import { DashboardSkeleton } from '../components/ui/Skeleton';
-import { useTheme, ThemeMode } from '../contexts/ThemeContext';
-import { useLanguage, LanguageCode } from '../contexts/LanguageContext';
+import { useTheme } from '../contexts/ThemeContext';
+import type { ThemeMode } from '../contexts/ThemeContext';
+import { useLanguage } from '../contexts/LanguageContext';
+import type { LanguageCode } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
 
 interface ToggleProps {
   enabled: boolean;
@@ -39,6 +41,7 @@ const Settings: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const { theme, setTheme } = useTheme();
   const { language, setLanguage } = useLanguage();
+  const { user, logout } = useAuth();
 
   const [settings, setSettings] = useState({
     notifications: true,
@@ -81,27 +84,43 @@ const Settings: React.FC = () => {
 
   return (
     <div className="space-y-6 max-w-4xl">
-      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-white mb-1">Settings & Configurations</h1>
-        <p className="text-sm text-slate-500">Manage your system themes, language overrides, and notifications</p>
+      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-bold text-white mb-1">Settings & Configurations</h1>
+          <p className="text-sm text-slate-500">Manage your system themes, language overrides, and notifications</p>
+        </div>
       </motion.div>
 
       {/* Profile Section */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass-card overflow-hidden">
-        <div className="p-4 border-b border-white/[0.06] flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-blue-500/10">
-            <User className="w-4 h-4 text-blue-400" />
+        <div className="p-4 border-b border-white/[0.06] flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-blue-500/10">
+              <User className="w-4 h-4 text-blue-400" />
+            </div>
+            <h3 className="text-sm font-semibold text-white">Profile & Session</h3>
           </div>
-          <h3 className="text-sm font-semibold text-white">Profile</h3>
+          <button
+            onClick={logout}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 transition-colors text-xs font-semibold border border-red-500/20 cursor-pointer"
+          >
+            <LogOut className="w-3.5 h-3.5" /> Log Out
+          </button>
         </div>
         <div className="divide-y divide-white/[0.04] px-5">
           <div className="flex items-center justify-between py-4">
             <span className="text-sm text-slate-300">Display Name</span>
-            <span className="text-sm text-slate-500 font-mono">Analytics Pro</span>
+            <span className="text-sm text-slate-200 font-mono font-bold">{user?.name || 'Analytics Pro'}</span>
           </div>
           <div className="flex items-center justify-between py-4">
-            <span className="text-sm text-slate-300">Email</span>
-            <span className="text-sm text-slate-500 font-mono">trader@analyticspro.com</span>
+            <span className="text-sm text-slate-300">Email Address</span>
+            <span className="text-sm text-slate-500 font-mono">{user?.email || 'trader@analyticspro.com'}</span>
+          </div>
+          <div className="flex items-center justify-between py-4">
+            <span className="text-sm text-slate-300">Operator Class</span>
+            <span className="text-xs font-bold font-mono px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">
+              {user?.role || 'Trader Pro'}
+            </span>
           </div>
         </div>
       </motion.div>
@@ -195,7 +214,7 @@ const Settings: React.FC = () => {
         </div>
       </motion.div>
 
-      {/* Security & Data Configurations */}
+      {/* Security & API Configurations */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="glass-card overflow-hidden">
         <div className="p-4 border-b border-white/[0.06] flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-emerald-500/10">

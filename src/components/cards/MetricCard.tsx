@@ -8,10 +8,10 @@ import {
   Activity,
   Zap,
 } from 'lucide-react';
-import { SparklineChart } from '../charts/SparklineChart';
+import { SparklineChart } from '../../charts/SparklineChart';
 import type { DashboardMetric } from '../../types';
 
-const iconMap: Record<string, React.FC<{ className?: string }>> = {
+const iconMap: Record<string, React.ComponentType<any>> = {
   Wallet,
   TrendingUp,
   BarChart3,

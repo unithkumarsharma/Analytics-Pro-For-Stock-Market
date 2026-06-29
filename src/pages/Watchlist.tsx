@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
-  Star,
   Plus,
   Bell,
   ArrowUpRight,
   ArrowDownRight,
-  MoreHorizontal,
   Trash2,
 } from 'lucide-react';
 import { SparklineChart } from '../charts/SparklineChart';
 import { TableSkeleton } from '../components/ui/Skeleton';
 import { watchlistItems } from '../data/mockData';
-import { formatNumber, formatPercent, getChangeColor, generateSparkline } from '../utils/formatters';
+import { formatNumber, formatPercent, generateSparkline } from '../utils/formatters';
 
 const Watchlist: React.FC = () => {
   const [loading, setLoading] = useState(true);

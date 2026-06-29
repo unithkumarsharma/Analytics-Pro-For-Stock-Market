@@ -3,7 +3,6 @@ import { Outlet } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { TopBar } from './TopBar';
 import { useNotifications } from '../contexts/NotificationContext';
-import { useLanguage } from '../contexts/LanguageContext';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 import {
   X,
@@ -12,7 +11,6 @@ import {
   Trash2,
   Keyboard,
   Info,
-  Calendar,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -26,7 +24,6 @@ export const MainLayout: React.FC = () => {
   const [keyboardModalOpen, setKeyboardModalOpen] = useState(false);
 
   const { notifications, markAsRead, markAllAsRead, clearAll } = useNotifications();
-  const { t } = useLanguage();
 
   // Register Keyboard Shortcuts
   useKeyboardShortcuts(() => setKeyboardModalOpen((prev) => !prev));

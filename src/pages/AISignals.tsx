@@ -2,23 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Brain,
-  Zap,
   Target,
-  Shield,
   ArrowUpRight,
   ArrowDownRight,
   Minus,
-  Clock,
-  CheckCircle2,
-  Info,
   Sliders,
   TrendingUp,
-  AlertTriangle,
   Lightbulb,
   HelpCircle,
 } from 'lucide-react';
 import { DashboardSkeleton } from '../components/ui/Skeleton';
-import { aiPredictions, AIPrediction } from '../utils/aiEngine';
+import { aiPredictions } from '../utils/aiEngine';
+import type { AIPrediction } from '../utils/aiEngine';
 
 const signalConfig = {
   BUY: {

@@ -3,12 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Maximize2,
   Minimize2,
-  Settings2,
   TrendingUp,
   TrendingDown,
   Minus,
   Crosshair,
-  ArrowRight,
   Trash2,
   BarChart3,
   Activity,
@@ -16,11 +14,9 @@ import {
   ChevronUp,
   Eye,
   EyeOff,
-  AlertTriangle,
   Target,
   Zap,
   Shield,
-  Clock,
   Layers,
   PenTool,
   MinusIcon,
@@ -37,7 +33,6 @@ import {
   ReferenceLine,
   CartesianGrid,
   Cell,
-  Legend,
 } from 'recharts';
 import { DashboardSkeleton } from '../components/ui/Skeleton';
 import {
@@ -49,7 +44,6 @@ import {
   detectTrend,
   generateTechnicalData,
 } from '../utils/indicators';
-import type { FibLevel, TrendInfo, MACDResult, BollingerBandsResult } from '../utils/indicators';
 
 // ===== Types =====
 interface IndicatorState {
@@ -131,7 +125,7 @@ const CandlestickShape = (props: any) => {
 };
 
 // ===== Custom Tooltip =====
-const ChartTooltip = ({ active, payload, label }: any) => {
+const ChartTooltip = ({ active, payload }: any) => {
   if (!active || !payload?.[0]) return null;
   const d = payload[0]?.payload;
   if (!d) return null;
@@ -311,9 +305,6 @@ const TechnicalAnalysis: React.FC = () => {
   const toggleIndicator = (key: keyof IndicatorState) => {
     setIndicators((prev) => ({ ...prev, [key]: !prev[key] }));
   };
-
-  // Active sub-panel count (for layout calculation)
-  const subPanels = [indicators.volume, indicators.rsi, indicators.macd].filter(Boolean).length;
 
   if (loading) return <DashboardSkeleton />;
 

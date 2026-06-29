@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, ArrowDownRight, Activity } from 'lucide-react';
-import { SparklineChart } from '../charts/SparklineChart';
+import { SparklineChart } from '../../charts/SparklineChart';
 import { AnimatedCounter } from '../ui/AnimatedCounter';
 import type { IndianIndex } from '../../types';
 

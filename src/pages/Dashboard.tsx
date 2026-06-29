@@ -1,28 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  ArrowUpRight,
-  ArrowDownRight,
   TrendingUp,
   TrendingDown,
   Flame,
   BarChart3,
-  Brain,
-  Briefcase,
   RefreshCw,
-  AlertTriangle,
-  Inbox,
-  Shield,
-  Zap,
-  Target,
-  ChevronUp,
-  ChevronDown,
-  ArrowUp,
-  ArrowDown,
-  Activity,
   Sliders,
   Check,
   RotateCcw,
+  ArrowUp,
+  ArrowDown,
+  Clock,
 } from 'lucide-react';
 import {
   PieChart,
@@ -31,8 +20,6 @@ import {
 } from 'recharts';
 import { IndexCard } from '../components/cards/IndexCard';
 import { SentimentGauge } from '../components/ui/SentimentGauge';
-import { AnimatedCounter } from '../components/ui/AnimatedCounter';
-import { DashboardSkeleton } from '../components/ui/Skeleton';
 import { ErrorBoundary } from '../components/ui/ErrorBoundary';
 import {
   niftyIndex,
@@ -43,38 +30,12 @@ import {
   topLosers,
   indianSectorHeatmap,
   sentimentData,
-  portfolioSummaryData,
-  aiOutlookData,
 } from '../data/mockData';
-import { formatNumber, formatPercent, getChangeColor } from '../utils/formatters';
+
+
+import { DashboardSkeleton } from '../components/ui/Skeleton';
 
 // ===== Sub-components =====
-
-/** Empty state placeholder */
-const EmptyState: React.FC<{ message: string; icon?: React.ReactNode }> = ({ message, icon }) => (
-  <div className="flex flex-col items-center justify-center py-12 gap-3 text-center">
-    {icon || <Inbox className="w-10 h-10 text-slate-600" />}
-    <p className="text-sm text-slate-500">{message}</p>
-  </div>
-);
-
-/** Error state placeholder */
-const ErrorState: React.FC<{ message: string; onRetry?: () => void }> = ({ message, onRetry }) => (
-  <div className="flex flex-col items-center justify-center py-10 gap-3 text-center">
-    <div className="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center">
-      <AlertTriangle className="w-6 h-6 text-red-400" />
-    </div>
-    <p className="text-sm text-slate-400">{message}</p>
-    {onRetry && (
-      <button
-        onClick={onRetry}
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 text-xs font-medium transition-colors"
-      >
-        <RefreshCw className="w-3 h-3" /> Retry
-      </button>
-    )}
-  </div>
-);
 
 /** Section wrapper with consistent animation */
 const Section: React.FC<{
@@ -90,18 +51,6 @@ const Section: React.FC<{
   >
     {children}
   </motion.div>
-);
-
-/** Inline skeleton for loading rows inside widgets */
-const RowSkeleton: React.FC<{ rows?: number }> = ({ rows = 5 }) => (
-  <div className="space-y-2 p-4">
-    {Array.from({ length: rows }).map((_, i) => (
-      <div key={i} className="flex items-center gap-3">
-        <div className="skeleton h-4 w-20 rounded" />
-        <div className="skeleton h-4 flex-1 rounded" />
-      </div>
-    ))}
-  </div>
 );
 
 // ===== Main Component =====

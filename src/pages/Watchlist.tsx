@@ -9,7 +9,7 @@ import {
   MoreHorizontal,
   Trash2,
 } from 'lucide-react';
-import { SparklineChart } from '../components/charts/SparklineChart';
+import { SparklineChart } from '../charts/SparklineChart';
 import { TableSkeleton } from '../components/ui/Skeleton';
 import { watchlistItems } from '../data/mockData';
 import { formatNumber, formatPercent, getChangeColor, generateSparkline } from '../utils/formatters';

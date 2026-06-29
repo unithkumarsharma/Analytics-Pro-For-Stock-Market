@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
-import { MainLayout } from './components/layout/MainLayout';
+import { MainLayout } from './layouts/MainLayout';
 import Dashboard from './pages/Dashboard';
 import Markets from './pages/Markets';
 import Portfolio from './pages/Portfolio';

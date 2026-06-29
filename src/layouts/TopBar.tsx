@@ -8,8 +8,8 @@ import {
   Clock,
   ChevronDown,
 } from 'lucide-react';
-import { marketIndices } from '../../data/mockData';
-import { formatNumber, formatPercent, getChangeColor } from '../../utils/formatters';
+import { marketIndices } from '../data/mockData';
+import { formatNumber, formatPercent, getChangeColor } from '../utils/formatters';
 
 interface TopBarProps {
   onMenuClick: () => void;

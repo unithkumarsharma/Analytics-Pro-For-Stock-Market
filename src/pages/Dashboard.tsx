@@ -47,7 +47,7 @@ const Dashboard: React.FC = () => {
     );
   }
 
-  // Exact mockup data values conforming to IndianIndex type
+  // Conforming to IndianIndex type
   const niftyData = {
     symbol: 'NIFTY 50',
     name: 'NSE',
@@ -189,342 +189,364 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="space-y-4 animate-[fadeIn_0.3s_ease-out]">
-      {/* ===== Row 1: Index Cards & Market Sentiment ===== */}
+      {/* ===== Row 1: Index Cards & Market Sentiment (Enforced exact heights) ===== */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <ErrorBoundary>
-          <IndexCard index={niftyData} />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <IndexCard index={sensexData} />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <IndexCard index={bankNiftyData} />
-        </ErrorBoundary>
+        <div className="h-[196px]">
+          <ErrorBoundary>
+            <IndexCard index={niftyData} />
+          </ErrorBoundary>
+        </div>
+        <div className="h-[196px]">
+          <ErrorBoundary>
+            <IndexCard index={sensexData} />
+          </ErrorBoundary>
+        </div>
+        <div className="h-[196px]">
+          <ErrorBoundary>
+            <IndexCard index={bankNiftyData} />
+          </ErrorBoundary>
+        </div>
         
         {/* Market Sentiment Card */}
-        <ErrorBoundary>
-          <div className="glass-card p-5 flex flex-col justify-between h-full bg-[#141720] border border-[#1e2130] rounded-xl">
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="text-[10px] font-bold text-[#6b7280] uppercase tracking-wider font-mono">MARKET SENTIMENT</h3>
-                <span className="text-xl font-bold text-[#22c55e] mt-1 block">Bullish</span>
+        <div className="h-[196px]">
+          <ErrorBoundary>
+            <div className="glass-card p-5 flex flex-col justify-between h-full bg-[#141720] border border-[#1e2130] rounded-xl">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="text-[10px] font-bold text-[#6b7280] uppercase tracking-wider font-mono">MARKET SENTIMENT</h3>
+                  <span className="text-xl font-bold text-[#22c55e] mt-1 block">Bullish</span>
+                </div>
+                <span className="text-xs font-mono font-bold text-[#6b7280]">72 / 100</span>
               </div>
-              <span className="text-xs font-mono font-bold text-[#6b7280]">72 / 100</span>
-            </div>
-            
-            <div className="flex-grow flex items-center justify-center my-1">
-              <SentimentGauge value={72} size={110} hideLabels={true} />
-            </div>
+              
+              <div className="flex-grow flex items-center justify-center my-1">
+                <SentimentGauge value={72} size={110} hideLabels={true} />
+              </div>
 
-            <div className="grid grid-cols-2 gap-2 border-t border-[#1e2130] pt-3 text-[10px] font-mono select-none">
-              <div>
-                <span className="text-[#6b7280] block">Today</span>
-                <span className="font-bold text-[#22c55e] flex items-center gap-0.5">
-                  <ArrowUpRight className="w-3 h-3" /> 12
-                </span>
-              </div>
-              <div>
-                <span className="text-[#6b7280] block">Yesterday</span>
-                <span className="font-bold text-[#6b7280]">60 / 100</span>
+              <div className="grid grid-cols-2 gap-2 border-t border-[#1e2130] pt-3 text-[10px] font-mono select-none">
+                <div>
+                  <span className="text-[#6b7280] block">Today</span>
+                  <span className="font-bold text-[#22c55e] flex items-center gap-0.5">
+                    <ArrowUpRight className="w-3 h-3" /> 12
+                  </span>
+                </div>
+                <div>
+                  <span className="text-[#6b7280] block">Yesterday</span>
+                  <span className="font-bold text-[#6b7280]">60 / 100</span>
+                </div>
               </div>
             </div>
-          </div>
-        </ErrorBoundary>
+          </ErrorBoundary>
+        </div>
       </div>
 
-      {/* ===== Row 2: Market Breadth & Sector Heatmap ===== */}
+      {/* ===== Row 2: Market Breadth & Sector Heatmap (Enforced exact heights) ===== */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         {/* Market Breadth */}
-        <div className="col-span-12 lg:col-span-5 glass-card p-5 bg-[#141720] border border-[#1e2130] rounded-xl flex flex-col justify-between">
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-[10px] font-bold text-[#6b7280] uppercase tracking-wider font-mono">MARKET BREADTH</span>
-            </div>
-            
-            <div className="grid grid-cols-12 items-center gap-3">
-              {/* Advances column */}
-              <div className="col-span-3 text-left">
-                <span className="text-[10px] text-[#6b7280] block uppercase font-mono tracking-wide">Advances</span>
-                <span className="text-base font-extrabold text-[#22c55e] block font-mono mt-0.5">1847</span>
-                <span className="text-[9px] text-[#22c55e]/70 block font-mono font-bold">(55%)</span>
+        <div className="col-span-12 lg:col-span-5 h-[180px]">
+          <div className="glass-card p-5 bg-[#141720] border border-[#1e2130] rounded-xl flex flex-col justify-between h-full">
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-[10px] font-bold text-[#6b7280] uppercase tracking-wider font-mono">MARKET BREADTH</span>
               </div>
+              
+              <div className="grid grid-cols-12 items-center gap-3">
+                {/* Advances column */}
+                <div className="col-span-3 text-left">
+                  <span className="text-[10px] text-[#6b7280] block uppercase font-mono tracking-wide">Advances</span>
+                  <span className="text-base font-extrabold text-[#22c55e] block font-mono mt-0.5">1847</span>
+                  <span className="text-[9px] text-[#22c55e]/70 block font-mono font-bold">(55%)</span>
+                </div>
 
-              {/* Progress gauge */}
-              <div className="col-span-6 flex flex-col items-center justify-center relative">
-                <SentimentGauge value={55} size={95} hideLabels={true} hideValueText={true} />
-                <span className="text-[9px] font-mono text-[#6b7280] absolute bottom-[-4px] uppercase font-bold tracking-wide">
-                  UNCHANGED 112 (3%)
-                </span>
-              </div>
+                {/* Progress gauge */}
+                <div className="col-span-6 flex flex-col items-center justify-center relative">
+                  <SentimentGauge value={55} size={95} hideLabels={true} hideValueText={true} />
+                  <span className="text-[9px] font-mono text-[#6b7280] absolute bottom-[-4px] uppercase font-bold tracking-wide">
+                    UNCHANGED 112 (3%)
+                  </span>
+                </div>
 
-              {/* Declines column */}
-              <div className="col-span-3 text-right">
-                <span className="text-[10px] text-[#6b7280] block uppercase font-mono tracking-wide">Declines</span>
-                <span className="text-base font-extrabold text-[#ef4444] block font-mono mt-0.5">1423</span>
-                <span className="text-[9px] text-[#ef4444]/70 block font-mono font-bold">(42%)</span>
+                {/* Declines column */}
+                <div className="col-span-3 text-right">
+                  <span className="text-[10px] text-[#6b7280] block uppercase font-mono tracking-wide">Declines</span>
+                  <span className="text-base font-extrabold text-[#ef4444] block font-mono mt-0.5">1423</span>
+                  <span className="text-[9px] text-[#ef4444]/70 block font-mono font-bold">(42%)</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Sector Heatmap */}
-        <div className="col-span-12 lg:col-span-7 glass-card p-5 bg-[#141720] border border-[#1e2130] rounded-xl flex flex-col justify-between">
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-[10px] font-bold text-[#6b7280] uppercase tracking-wider font-mono flex items-center gap-1.5">
-                <Flame className="w-3.5 h-3.5 text-amber-500" />
-                SECTOR HEATMAP
-              </span>
-              <span className="text-[9px] text-[#6b7280] font-mono uppercase tracking-wide">INDICES CHANGE</span>
-            </div>
+        <div className="col-span-12 lg:col-span-7 h-[180px]">
+          <div className="glass-card p-5 bg-[#141720] border border-[#1e2130] rounded-xl flex flex-col justify-between h-full">
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-[10px] font-bold text-[#6b7280] uppercase tracking-wider font-mono flex items-center gap-1.5">
+                  <Flame className="w-3.5 h-3.5 text-amber-500" />
+                  SECTOR HEATMAP
+                </span>
+                <span className="text-[9px] text-[#6b7280] font-mono uppercase tracking-wide">INDICES CHANGE</span>
+              </div>
 
-            {/* Asymmetrical columns matching weights */}
-            <div className="grid grid-cols-4 gap-2 h-[120px]">
-              {/* Column 1: 2 items (IT, BANKING) */}
-              <div className="flex flex-col gap-2 h-full">
-                <div className="flex-1 min-h-0">{renderHeatmapCell(sectorHeatmapData[0])}</div>
-                <div className="flex-1 min-h-0">{renderHeatmapCell(sectorHeatmapData[4])}</div>
-              </div>
-              {/* Column 2: 3 items (PHARMA, FINANCIAL SERVICES, AUTO) */}
-              <div className="flex flex-col gap-2 h-full">
-                <div className="flex-1 min-h-0">{renderHeatmapCell(sectorHeatmapData[1])}</div>
-                <div className="flex-1 min-h-0">{renderHeatmapCell(sectorHeatmapData[5])}</div>
-                <div className="flex-1 min-h-0">{renderHeatmapCell(sectorHeatmapData[8])}</div>
-              </div>
-              {/* Column 3: 3 items (ENERGY, METAL, FMCG) */}
-              <div className="flex flex-col gap-2 h-full">
-                <div className="flex-1 min-h-0">{renderHeatmapCell(sectorHeatmapData[2])}</div>
-                <div className="flex-1 min-h-0">{renderHeatmapCell(sectorHeatmapData[6])}</div>
-                <div className="flex-1 min-h-0">{renderHeatmapCell(sectorHeatmapData[9])}</div>
-              </div>
-              {/* Column 4: 2 items (CONSUMER GOODS, INFRASTRUCTURE) */}
-              <div className="flex flex-col gap-2 h-full">
-                <div className="flex-1 min-h-0">{renderHeatmapCell(sectorHeatmapData[3])}</div>
-                <div className="flex-1 min-h-0">{renderHeatmapCell(sectorHeatmapData[7])}</div>
+              {/* Asymmetrical columns matching weights */}
+              <div className="grid grid-cols-4 gap-2 h-[100px]">
+                {/* Column 1: 2 items (IT, BANKING) */}
+                <div className="flex flex-col gap-2 h-full">
+                  <div className="flex-1 min-h-0">{renderHeatmapCell(sectorHeatmapData[0])}</div>
+                  <div className="flex-1 min-h-0">{renderHeatmapCell(sectorHeatmapData[4])}</div>
+                </div>
+                {/* Column 2: 3 items (PHARMA, FINANCIAL SERVICES, AUTO) */}
+                <div className="flex flex-col gap-2 h-full">
+                  <div className="flex-1 min-h-0">{renderHeatmapCell(sectorHeatmapData[1])}</div>
+                  <div className="flex-1 min-h-0">{renderHeatmapCell(sectorHeatmapData[5])}</div>
+                  <div className="flex-1 min-h-0">{renderHeatmapCell(sectorHeatmapData[8])}</div>
+                </div>
+                {/* Column 3: 3 items (ENERGY, METAL, FMCG) */}
+                <div className="flex flex-col gap-2 h-full">
+                  <div className="flex-1 min-h-0">{renderHeatmapCell(sectorHeatmapData[2])}</div>
+                  <div className="flex-1 min-h-0">{renderHeatmapCell(sectorHeatmapData[6])}</div>
+                  <div className="flex-1 min-h-0">{renderHeatmapCell(sectorHeatmapData[9])}</div>
+                </div>
+                {/* Column 4: 2 items (CONSUMER GOODS, INFRASTRUCTURE) */}
+                <div className="flex flex-col gap-2 h-full">
+                  <div className="flex-1 min-h-0">{renderHeatmapCell(sectorHeatmapData[3])}</div>
+                  <div className="flex-1 min-h-0">{renderHeatmapCell(sectorHeatmapData[7])}</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* ===== Row 3: Top Gainers, Top Losers, Market News ===== */}
+      {/* ===== Row 3: Top Gainers, Top Losers, Market News (Enforced exact heights) ===== */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Top Gainers */}
-        <div className="glass-card bg-[#141720] border border-[#1e2130] rounded-xl flex flex-col justify-between">
-          <div>
-            <div className="px-5 py-3.5 border-b border-[#1e2130] flex items-center justify-between">
-              <span className="text-[10px] font-bold text-white uppercase tracking-wider font-mono">TOP GAINERS</span>
+        <div className="h-[300px]">
+          <div className="glass-card bg-[#141720] border border-[#1e2130] rounded-xl flex flex-col justify-between h-full">
+            <div>
+              <div className="px-5 py-3.5 border-b border-[#1e2130] flex items-center justify-between">
+                <span className="text-[10px] font-bold text-white uppercase tracking-wider font-mono">TOP GAINERS</span>
+              </div>
+              <div className="divide-y divide-[#1e2130]/50">
+                {gainersList.map((stock, i) => (
+                  <div key={stock.symbol} className="grid grid-cols-12 items-center px-5 py-2.5 text-xs h-[42px] hover:bg-white/[0.01] odd:bg-white/[0.005] transition-colors">
+                    <div className="col-span-6 flex items-center gap-2 truncate">
+                      <span className="text-[9px] font-mono text-[#6b7280] w-3">{i + 1}</span>
+                      <span className="font-semibold text-white truncate">{stock.symbol}</span>
+                    </div>
+                    <div className="col-span-3 text-right font-mono text-slate-300">
+                      ₹{formatNumber(stock.price)}
+                    </div>
+                    <div className="col-span-3 text-right font-mono font-bold text-[#22c55e]">
+                      +{stock.changePercent.toFixed(2)}%
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="divide-y divide-[#1e2130]/50">
-              {gainersList.map((stock, i) => (
-                <div key={stock.symbol} className="grid grid-cols-12 items-center px-5 py-2.5 text-xs h-[42px] hover:bg-white/[0.01] odd:bg-white/[0.005] transition-colors">
-                  <div className="col-span-6 flex items-center gap-2 truncate">
-                    <span className="text-[9px] font-mono text-[#6b7280] w-3">{i + 1}</span>
-                    <span className="font-semibold text-white truncate">{stock.symbol}</span>
-                  </div>
-                  <div className="col-span-3 text-right font-mono text-slate-300">
-                    ₹{formatNumber(stock.price)}
-                  </div>
-                  <div className="col-span-3 text-right font-mono font-bold text-[#22c55e]">
-                    +{stock.changePercent.toFixed(2)}%
-                  </div>
-                </div>
-              ))}
+            <div className="px-5 py-3 border-t border-[#1e2130] bg-white/[0.01]">
+              <span className="text-[10px] font-bold text-blue-500 hover:text-blue-400 transition-colors cursor-pointer block">
+                View All Gainers &gt;
+              </span>
             </div>
-          </div>
-          <div className="px-5 py-3 border-t border-[#1e2130] bg-white/[0.01]">
-            <span className="text-[10px] font-bold text-blue-500 hover:text-blue-400 transition-colors cursor-pointer block">
-              View All Gainers &gt;
-            </span>
           </div>
         </div>
 
         {/* Top Losers */}
-        <div className="glass-card bg-[#141720] border border-[#1e2130] rounded-xl flex flex-col justify-between">
-          <div>
-            <div className="px-5 py-3.5 border-b border-[#1e2130] flex items-center justify-between">
-              <span className="text-[10px] font-bold text-red-500 uppercase tracking-wider font-mono">TOP LOSERS</span>
+        <div className="h-[300px]">
+          <div className="glass-card bg-[#141720] border border-[#1e2130] rounded-xl flex flex-col justify-between h-full">
+            <div>
+              <div className="px-5 py-3.5 border-b border-[#1e2130] flex items-center justify-between">
+                <span className="text-[10px] font-bold text-[#ef4444] uppercase tracking-wider font-mono">TOP LOSERS</span>
+              </div>
+              <div className="divide-y divide-[#1e2130]/50">
+                {losersList.map((stock, i) => (
+                  <div key={stock.symbol} className="grid grid-cols-12 items-center px-5 py-2.5 text-xs h-[42px] hover:bg-white/[0.01] odd:bg-white/[0.005] transition-colors">
+                    <div className="col-span-6 flex items-center gap-2 truncate">
+                      <span className="text-[9px] font-mono text-[#6b7280] w-3">{i + 1}</span>
+                      <span className="font-semibold text-white truncate">{stock.symbol}</span>
+                    </div>
+                    <div className="col-span-3 text-right font-mono text-slate-300">
+                      ₹{formatNumber(stock.price)}
+                    </div>
+                    <div className="col-span-3 text-right font-mono font-bold text-[#ef4444]">
+                      {stock.changePercent.toFixed(2)}%
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="divide-y divide-[#1e2130]/50">
-              {losersList.map((stock, i) => (
-                <div key={stock.symbol} className="grid grid-cols-12 items-center px-5 py-2.5 text-xs h-[42px] hover:bg-white/[0.01] odd:bg-white/[0.005] transition-colors">
-                  <div className="col-span-6 flex items-center gap-2 truncate">
-                    <span className="text-[9px] font-mono text-[#6b7280] w-3">{i + 1}</span>
-                    <span className="font-semibold text-white truncate">{stock.symbol}</span>
-                  </div>
-                  <div className="col-span-3 text-right font-mono text-slate-300">
-                    ₹{formatNumber(stock.price)}
-                  </div>
-                  <div className="col-span-3 text-right font-mono font-bold text-[#ef4444]">
-                    {stock.changePercent.toFixed(2)}%
-                  </div>
-                </div>
-              ))}
+            <div className="px-5 py-3 border-t border-[#1e2130] bg-white/[0.01]">
+              <span className="text-[10px] font-bold text-red-500 hover:text-red-400 transition-colors cursor-pointer block">
+                View All Losers &gt;
+              </span>
             </div>
-          </div>
-          <div className="px-5 py-3 border-t border-[#1e2130] bg-white/[0.01]">
-            <span className="text-[10px] font-bold text-red-500 hover:text-red-400 transition-colors cursor-pointer block">
-              View All Losers &gt;
-            </span>
           </div>
         </div>
 
         {/* Market News */}
-        <div className="glass-card bg-[#141720] border border-[#1e2130] rounded-xl flex flex-col justify-between">
-          <div>
-            <div className="px-5 py-3.5 border-b border-[#1e2130] flex items-center justify-between">
-              <span className="text-[10px] font-bold text-[#6b7280] uppercase tracking-wider font-mono flex items-center gap-1.5">
-                <BarChart3 className="w-3.5 h-3.5 text-blue-400" />
-                MARKET NEWS
-              </span>
-              <span className="text-[9px] text-blue-500 hover:text-blue-400 transition-colors cursor-pointer font-bold">View All</span>
-            </div>
-            <div className="divide-y divide-[#1e2130]/50 px-5">
-              {marketNewsList.map((news) => (
-                <div key={news.title} className="py-2.5 min-w-0">
-                  <p className="text-[11px] font-semibold text-white leading-snug line-clamp-1 hover:text-blue-500 transition-colors cursor-pointer">
-                    {news.title}
-                  </p>
-                  <div className="flex items-center justify-between text-[9px] text-[#6b7280] font-mono mt-1">
-                    <span>{news.source}</span>
-                    <span>{news.time}</span>
+        <div className="h-[300px]">
+          <div className="glass-card bg-[#141720] border border-[#1e2130] rounded-xl flex flex-col justify-between h-full">
+            <div>
+              <div className="px-5 py-3.5 border-b border-[#1e2130] flex items-center justify-between">
+                <span className="text-[10px] font-bold text-[#6b7280] uppercase tracking-wider font-mono flex items-center gap-1.5">
+                  <BarChart3 className="w-3.5 h-3.5 text-blue-400" />
+                  MARKET NEWS
+                </span>
+                <span className="text-[9px] text-blue-500 hover:text-blue-400 transition-colors cursor-pointer font-bold">View All</span>
+              </div>
+              <div className="divide-y divide-[#1e2130]/50 px-5">
+                {marketNewsList.map((news) => (
+                  <div key={news.title} className="py-2.5 min-w-0">
+                    <p className="text-[11px] font-semibold text-white leading-snug line-clamp-1 hover:text-blue-500 transition-colors cursor-pointer">
+                      {news.title}
+                    </p>
+                    <div className="flex items-center justify-between text-[9px] text-[#6b7280] font-mono mt-1">
+                      <span>{news.source}</span>
+                      <span>{news.time}</span>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* ===== Row 4: Chart View & AI Market Outlook ===== */}
+      {/* ===== Row 4: Chart View & AI Market Outlook (Enforced exact heights) ===== */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         {/* Nifty 50 Chart */}
-        <div className="col-span-12 lg:col-span-8 glass-card p-5 bg-[#141720] border border-[#1e2130] rounded-xl">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] font-bold text-[#6b7280] uppercase tracking-wider font-mono">NIFTY 50 CHART</span>
-            </div>
+        <div className="col-span-12 lg:col-span-8 h-[320px]">
+          <div className="glass-card p-5 bg-[#141720] border border-[#1e2130] rounded-xl h-full flex flex-col justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-bold text-[#6b7280] uppercase tracking-wider font-mono">NIFTY 50 CHART</span>
+              </div>
 
-            <div className="flex items-center gap-4 flex-wrap sm:flex-nowrap">
-              <span className="text-xs font-mono font-bold text-[#22c55e]">
-                24,782.45 <span className="text-[10px] font-normal font-sans text-[#6b7280]">+287.35 (1.17%)</span>
-              </span>
-              
-              {/* Timeline switch buttons */}
-              <div className="flex gap-1 bg-[#0d0f14] border border-[#1e2130] rounded p-0.5 text-[9px] font-mono select-none self-start">
-                {(['1D', '1W', '1M', '3M', '1Y', '5Y'] as const).map((time) => (
-                  <button
-                    key={time}
-                    onClick={() => setTimeTab(time)}
-                    className={`px-2 py-0.5 rounded transition-colors ${
-                      time === timeTab ? 'bg-blue-600 text-white font-bold' : 'text-[#6b7280] hover:text-slate-200'
-                    }`}
-                  >
-                    {time}
-                  </button>
-                ))}
+              <div className="flex items-center gap-4 flex-wrap sm:flex-nowrap">
+                <span className="text-xs font-mono font-bold text-[#22c55e]">
+                  24,782.45 <span className="text-[10px] font-normal font-sans text-[#6b7280]">+287.35 (1.17%)</span>
+                </span>
+                
+                {/* Timeline switch buttons */}
+                <div className="flex gap-1 bg-[#0d0f14] border border-[#1e2130] rounded p-0.5 text-[9px] font-mono select-none self-start">
+                  {(['1D', '1W', '1M', '3M', '1Y', '5Y'] as const).map((time) => (
+                    <button
+                      key={time}
+                      onClick={() => setTimeTab(time)}
+                      className={`px-2 py-0.5 rounded transition-colors ${
+                        time === timeTab ? 'bg-blue-600 text-white font-bold' : 'text-[#6b7280] hover:text-slate-200'
+                      }`}
+                    >
+                      {time}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Real Candlestick with Volume composed chart */}
-          <div className="h-[180px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <ComposedChart data={chartData} margin={{ top: 5, right: 5, left: -25, bottom: 5 }}>
-                <CartesianGrid stroke="#1e2130" strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="time" stroke="#6b7280" fontSize={9} className="font-mono" tickLine={false} />
-                <YAxis
-                  yAxisId="price"
-                  domain={[24400, 24900]}
-                  stroke="#6b7280"
-                  fontSize={9}
-                  className="font-mono"
-                  tickLine={false}
-                  orientation="right"
-                />
-                <YAxis
-                  yAxisId="volume"
-                  domain={[0, 180000]}
-                  hide={true}
-                />
-                <Tooltip contentStyle={{ backgroundColor: '#141720', border: '1px solid #1e2130', borderRadius: '8px' }} />
-                
-                {/* Candlestick Wicks */}
-                <Bar yAxisId="price" dataKey="wick" barSize={1.5}>
-                  {chartData.map((entry, index) => (
-                    <Cell key={index} fill={entry.isUp ? '#22c55e' : '#ef4444'} />
-                  ))}
-                </Bar>
-                
-                {/* Candlestick Bodies */}
-                <Bar yAxisId="price" dataKey="body" barSize={10}>
-                  {chartData.map((entry, index) => (
-                    <Cell key={index} fill={entry.isUp ? '#22c55e' : '#ef4444'} />
-                  ))}
-                </Bar>
+            {/* Real Candlestick with Volume composed chart */}
+            <div className="flex-1 w-full min-h-0">
+              <ResponsiveContainer width="100%" height="100%">
+                <ComposedChart data={chartData} margin={{ top: 5, right: 5, left: -25, bottom: 5 }}>
+                  <CartesianGrid stroke="#1e2130" strokeDasharray="3 3" vertical={false} />
+                  <XAxis dataKey="time" stroke="#6b7280" fontSize={9} className="font-mono" tickLine={false} />
+                  <YAxis
+                    yAxisId="price"
+                    domain={[24400, 24900]}
+                    stroke="#6b7280"
+                    fontSize={9}
+                    className="font-mono"
+                    tickLine={false}
+                    orientation="right"
+                  />
+                  <YAxis
+                    yAxisId="volume"
+                    domain={[0, 180000]}
+                    hide={true}
+                  />
+                  <Tooltip contentStyle={{ backgroundColor: '#141720', border: '1px solid #1e2130', borderRadius: '8px' }} />
+                  
+                  {/* Candlestick Wicks */}
+                  <Bar yAxisId="price" dataKey="wick" barSize={1.5}>
+                    {chartData.map((entry, index) => (
+                      <Cell key={index} fill={entry.isUp ? '#22c55e' : '#ef4444'} />
+                    ))}
+                  </Bar>
+                  
+                  {/* Candlestick Bodies */}
+                  <Bar yAxisId="price" dataKey="body" barSize={10}>
+                    {chartData.map((entry, index) => (
+                      <Cell key={index} fill={entry.isUp ? '#22c55e' : '#ef4444'} />
+                    ))}
+                  </Bar>
 
-                {/* Subtly Overlayed Volume Bars */}
-                <Bar yAxisId="volume" dataKey="volume" barSize={12}>
-                  {chartData.map((entry, index) => (
-                    <Cell key={index} fill={entry.isUp ? 'rgba(34, 197, 94, 0.12)' : 'rgba(239, 68, 68, 0.12)'} />
-                  ))}
-                </Bar>
-              </ComposedChart>
-            </ResponsiveContainer>
+                  {/* Subtly Overlayed Volume Bars */}
+                  <Bar yAxisId="volume" dataKey="volume" barSize={12}>
+                    {chartData.map((entry, index) => (
+                      <Cell key={index} fill={entry.isUp ? 'rgba(34, 197, 94, 0.12)' : 'rgba(239, 68, 68, 0.12)'} />
+                    ))}
+                  </Bar>
+                </ComposedChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
 
         {/* AI Market Outlook */}
-        <div className="col-span-12 lg:col-span-4 glass-card p-5 bg-[#141720] border border-[#1e2130] rounded-xl flex flex-col justify-between">
-          <div>
-            <div className="flex justify-between items-center mb-3">
-              <span className="text-[10px] font-bold text-[#6b7280] uppercase tracking-wider font-mono flex items-center gap-1.5">
-                <Activity className="w-3.5 h-3.5 text-blue-400" />
-                AI MARKET OUTLOOK
-              </span>
-              <span className="text-[9px] text-blue-500 font-bold font-mono hover:text-blue-400 cursor-pointer">Confidence: 72% &gt;</span>
-            </div>
-            
-            <div className="flex items-center justify-between mb-3 gap-2">
-              <span className="text-sm font-mono font-bold text-[#22c55e] px-2 py-0.5 rounded bg-[#22c55e]/10 border border-[#22c55e]/20">
-                BULLISH
-              </span>
-
-              {/* Tiny forecast chart */}
-              <div className="h-[28px] w-[90px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={aiForecastData}>
-                    <defs>
-                      <linearGradient id="aiForecastGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#22c55e" stopOpacity={0.2} />
-                        <stop offset="100%" stopColor="#22c55e" stopOpacity={0} />
-                      </linearGradient>
-                    </defs>
-                    <Area type="monotone" dataKey="price" stroke="#22c55e" strokeWidth={1.2} fill="url(#aiForecastGrad)" />
-                  </AreaChart>
-                </ResponsiveContainer>
+        <div className="col-span-12 lg:col-span-4 h-[320px]">
+          <div className="glass-card p-5 bg-[#141720] border border-[#1e2130] rounded-xl flex flex-col justify-between h-full">
+            <div>
+              <div className="flex justify-between items-center mb-3">
+                <span className="text-[10px] font-bold text-[#6b7280] uppercase tracking-wider font-mono flex items-center gap-1.5">
+                  <Activity className="w-3.5 h-3.5 text-blue-400" />
+                  AI MARKET OUTLOOK
+                </span>
+                <span className="text-[9px] text-blue-500 font-bold font-mono hover:text-blue-400 cursor-pointer">Confidence: 72% &gt;</span>
               </div>
-            </div>
+              
+              <div className="flex items-center justify-between mb-3 gap-2">
+                <span className="text-sm font-mono font-bold text-[#22c55e] px-2 py-0.5 rounded bg-[#22c55e]/10 border border-[#22c55e]/20">
+                  BULLISH
+                </span>
 
-            <p className="text-[11px] text-slate-300 leading-relaxed mb-4">
-              Market showing strong bullish momentum with positive indicators across major sectors. Banking and IT sectors expected to lead the rally.
-            </p>
+                {/* Tiny forecast chart */}
+                <div className="h-[28px] w-[90px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={aiForecastData}>
+                      <defs>
+                        <linearGradient id="aiForecastGrad2" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#22c55e" stopOpacity={0.2} />
+                          <stop offset="100%" stopColor="#22c55e" stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <Area type="monotone" dataKey="price" stroke="#22c55e" strokeWidth={1.2} fill="url(#aiForecastGrad2)" />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
 
-            {/* Key factors */}
-            <div className="border-t border-[#1e2130] pt-3.5">
-              <span className="text-[9px] text-[#6b7280] uppercase tracking-wider font-mono block mb-2 font-bold">Key Factors</span>
-              <div className="space-y-1.5 text-[10px] text-slate-300">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#22c55e] shrink-0" />
-                  <span>Strong global cues</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#22c55e] shrink-0" />
-                  <span>RBI policy support</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#22c55e] shrink-0" />
-                  <span>Earnings optimism</span>
+              <p className="text-[11px] text-slate-300 leading-relaxed mb-4">
+                Market showing strong bullish momentum with positive indicators across major sectors. Banking and IT sectors expected to lead the rally.
+              </p>
+
+              {/* Key factors */}
+              <div className="border-t border-[#1e2130] pt-3.5">
+                <span className="text-[9px] text-[#6b7280] uppercase tracking-wider font-mono block mb-2 font-bold">Key Factors</span>
+                <div className="space-y-1.5 text-[10px] text-slate-300">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#22c55e] shrink-0" />
+                    <span>Strong global cues</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#22c55e] shrink-0" />
+                    <span>RBI policy support</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#22c55e] shrink-0" />
+                    <span>Earnings optimism</span>
+                  </div>
                 </div>
               </div>
             </div>

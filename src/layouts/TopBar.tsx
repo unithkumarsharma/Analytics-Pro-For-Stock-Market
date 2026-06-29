@@ -1,132 +1,127 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
 import {
   Search,
   Bell,
-  Menu,
-  Wifi,
-  Clock,
-  ChevronDown,
+  Sun,
+  Moon,
+  Briefcase,
+  TrendingUp,
+  TrendingDown,
 } from 'lucide-react';
-import { marketIndices } from '../data/mockData';
-import { formatNumber, formatPercent, getChangeColor } from '../utils/formatters';
 import { useNotifications } from '../contexts/NotificationContext';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface TopBarProps {
   onMenuClick: () => void;
   onNotificationClick: () => void;
 }
 
-export const TopBar: React.FC<TopBarProps> = ({ onMenuClick, onNotificationClick }) => {
-  const [searchFocused, setSearchFocused] = useState(false);
+export const TopBar: React.FC<TopBarProps> = ({ onNotificationClick }) => {
   const { notifications } = useNotifications();
-  const { t } = useLanguage();
+  const { theme, setTheme } = useTheme();
+  const [time, setTime] = useState(new Date());
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
-  const now = new Date();
-  const timeString = now.toLocaleTimeString('en-US', {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false,
-  });
+  useEffect(() => {
+    const timer = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatISTTime = (date: Date) => {
+    return date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true,
+    });
+  };
+
+  const tickerData = [
+    { symbol: 'NIFTY 50', value: '24,782.45', change: '+1.17%', isUp: true },
+    { symbol: 'SENSEX', value: '81,742.38', change: '+1.22%', isUp: true },
+    { symbol: 'BANKNIFTY', value: '53,218.75', change: '-0.27%', isUp: false },
+    { symbol: 'INDIAVIX', value: '14.82', change: '+5.96%', isUp: true },
+    { symbol: 'USD/INR', value: '83.12', change: '-0.12%', isUp: false },
+  ];
 
   return (
-    <header className="h-16 border-b border-white/[0.06] bg-[#0d1117]/80 backdrop-blur-xl sticky top-0 z-30">
-      <div className="h-full flex items-center px-4 lg:px-6 gap-4">
-        {/* Mobile menu */}
-        <button
-          onClick={onMenuClick}
-          className="lg:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.04] transition-colors"
-        >
-          <Menu className="w-5 h-5" />
-        </button>
-
-        {/* Market Ticker */}
-        <div className="hidden md:flex items-center gap-4 overflow-x-auto no-scrollbar flex-1 min-w-0">
-          {marketIndices.slice(0, 6).map((idx) => (
-            <div
-              key={idx.symbol}
-              className="flex items-center gap-2 shrink-0 px-2.5 py-1.5 rounded-md hover:bg-white/[0.03] transition-colors cursor-pointer"
-            >
-              <span className="text-xs font-semibold text-slate-300">
-                {idx.symbol}
-              </span>
-              <span className="text-xs font-mono text-slate-200">
-                {formatNumber(idx.value, idx.value > 1000 ? 0 : 2)}
-              </span>
-              <span className={`text-xs font-mono font-semibold ${getChangeColor(idx.changePercent)}`}>
-                {formatPercent(idx.changePercent)}
-              </span>
-            </div>
-          ))}
+    <header className="border-b border-white/[0.08] bg-[#0c0e14] z-30 shrink-0">
+      {/* Row 1: Search & Controls */}
+      <div className="h-14 flex items-center justify-between px-4 lg:px-6">
+        {/* Search Input */}
+        <div className="flex-1 max-w-md relative flex items-center">
+          <Search className="w-4 h-4 text-slate-500 absolute left-3" />
+          <input
+            type="text"
+            placeholder="Search any symbol, company or index...   ⌘K"
+            className="w-full bg-[#161a25] border border-white/[0.06] hover:border-white/10 focus:border-blue-500/50 rounded-lg pl-9 pr-4 py-1.5 text-xs text-slate-200 placeholder:text-slate-500 focus:outline-none transition-all font-mono"
+          />
         </div>
 
-        {/* Right section */}
-        <div className="flex items-center gap-2 ml-auto shrink-0">
-          {/* Search */}
-          <motion.div
-            className={`relative hidden sm:flex items-center rounded-lg transition-all ${
-              searchFocused
-                ? 'bg-white/[0.08] border border-blue-500/30 w-64'
-                : 'bg-white/[0.04] border border-transparent w-48'
-            }`}
-            animate={{ width: searchFocused ? 256 : 192 }}
-          >
-            <Search className="w-4 h-4 text-slate-500 absolute left-3" />
-            <input
-              type="text"
-              placeholder={t('searchPlaceholder')}
-              className="w-full py-2 pl-9 pr-3 bg-transparent text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none"
-              onFocus={() => setSearchFocused(true)}
-              onBlur={() => setSearchFocused(false)}
-            />
-            <span className="absolute right-3 text-[10px] text-slate-600 font-mono border border-white/10 rounded px-1">
-              ⌘K
-            </span>
-          </motion.div>
-
-          {/* Clock */}
-          <div className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-slate-500">
-            <Clock className="w-3.5 h-3.5" />
-            <span className="text-xs font-mono">{timeString}</span>
-            <span className="text-[10px] text-slate-600">ET</span>
+        {/* Action Controls */}
+        <div className="flex items-center gap-3.5">
+          {/* Theme switcher */}
+          <div className="flex items-center gap-1 bg-[#161a25] border border-white/[0.06] rounded-full p-0.5 select-none">
+            <button
+              onClick={() => setTheme('light')}
+              className={`p-1 rounded-full transition-colors ${
+                theme === 'light' ? 'bg-white/10 text-white' : 'text-slate-500 hover:text-slate-300'
+              }`}
+            >
+              <Sun className="w-3.5 h-3.5" />
+            </button>
+            <button
+              onClick={() => setTheme('dark')}
+              className={`p-1 rounded-full transition-colors ${
+                theme === 'dark' ? 'bg-white/10 text-white' : 'text-slate-500 hover:text-slate-300'
+              }`}
+            >
+              <Moon className="w-3.5 h-3.5" />
+            </button>
           </div>
 
-          {/* Live indicator */}
-          <div className="flex items-center gap-1.5 px-2 py-1.5">
-            <div className="live-dot" />
-            <span className="text-xs font-medium text-emerald-400 hidden sm:inline">LIVE</span>
-          </div>
+          {/* Quick Portfolio/Briefcase icon */}
+          <button className="p-2 rounded-lg bg-[#161a25] border border-white/[0.06] text-slate-400 hover:text-white hover:bg-white/[0.02] transition-colors cursor-pointer">
+            <Briefcase className="w-4 h-4" />
+          </button>
 
-          {/* Connection */}
-          <div className="p-2 rounded-lg text-slate-500 hover:text-slate-300 hover:bg-white/[0.04] transition-colors">
-            <Wifi className="w-4 h-4" />
-          </div>
-
-          {/* Notifications */}
+          {/* Notifications Bell */}
           <button
             onClick={onNotificationClick}
-            className="relative p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.04] transition-colors"
+            className="relative p-2 rounded-lg bg-[#161a25] border border-white/[0.06] text-slate-400 hover:text-white hover:bg-white/[0.02] transition-colors cursor-pointer"
           >
             <Bell className="w-4 h-4" />
             {unreadCount > 0 && (
-              <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-blue-500 text-[8px] font-bold text-white rounded-full flex items-center justify-center animate-bounce">
+              <span className="absolute -top-1 -right-1 w-4 h-4 bg-blue-500 text-[8px] font-bold text-white rounded-full flex items-center justify-center">
                 {unreadCount}
               </span>
             )}
           </button>
 
-          {/* User */}
-          <button className="flex items-center gap-2 pl-3 pr-2 py-1.5 rounded-lg hover:bg-white/[0.04] transition-colors">
-            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center">
-              <span className="text-xs font-bold text-white">AP</span>
+          {/* Live Status indicator */}
+          <div className="flex items-center gap-2 text-right">
+            <div className="w-1.5 h-1.5 rounded-full bg-[#00c076] live-dot animate-pulse" />
+            <div className="leading-tight text-left">
+              <span className="text-[10px] font-bold text-slate-400 block tracking-wide">Market Open</span>
+              <span className="text-[9px] font-mono text-slate-500">{formatISTTime(time)} IST</span>
             </div>
-            <ChevronDown className="w-3 h-3 text-slate-500 hidden sm:block" />
-          </button>
+          </div>
         </div>
+      </div>
+
+      {/* Row 2: Live Index Ticker */}
+      <div className="h-9 bg-[#11131c] border-t border-white/[0.04] flex items-center px-4 lg:px-6 gap-6 overflow-x-auto no-scrollbar scroll-smooth">
+        {tickerData.map((t) => (
+          <div key={t.symbol} className="flex items-center gap-2 shrink-0 text-[10px] font-mono select-none">
+            <span className="text-slate-400 font-semibold">{t.symbol}</span>
+            <span className="text-slate-200 font-bold">{t.value}</span>
+            <span className={`flex items-center gap-0.5 font-bold ${t.isUp ? 'text-[#00c076]' : 'text-[#ff4d4f]'}`}>
+              {t.isUp ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+              {t.change}
+            </span>
+          </div>
+        ))}
       </div>
     </header>
   );

@@ -14,9 +14,15 @@ import {
   ChevronLeft,
   ChevronRight,
   Activity,
-  TrendingUp,
+  Flame,
+  Search,
+  Calendar,
+  BellRing,
+  FileSpreadsheet,
+  Award,
+  ChevronDown,
+  HelpCircle,
 } from 'lucide-react';
-import { useLanguage, translations } from '../contexts/LanguageContext';
 
 interface SidebarProps {
   collapsed: boolean;
@@ -27,34 +33,48 @@ interface SidebarProps {
 
 interface NavItem {
   path: string;
-  labelKey: keyof typeof translations['en'];
+  label: string;
   icon: React.ComponentType<any>;
   badge?: string;
+  badgeType?: 'blue' | 'purple' | 'red';
   section: string;
 }
 
 const navItems: NavItem[] = [
-  { path: '/', labelKey: 'dashboard', icon: LayoutDashboard, section: 'main' },
-  { path: '/markets', labelKey: 'markets', icon: BarChart3, section: 'main' },
-  { path: '/portfolio', labelKey: 'portfolio', icon: Briefcase, section: 'main' },
-  { path: '/technical', labelKey: 'technicalAnalysis', icon: LineChart, section: 'analytics' },
-  { path: '/options', labelKey: 'optionsAnalytics', icon: Binary, section: 'analytics' },
-  { path: '/signals', labelKey: 'aiSignals', icon: Brain, badge: '5', section: 'analytics' },
-  { path: '/watchlist', labelKey: 'watchlist', icon: Star, section: 'tools' },
-  { path: '/news', labelKey: 'news', icon: Newspaper, badge: '12', section: 'tools' },
-  { path: '/settings', labelKey: 'settings', icon: Settings, section: 'system' },
+  // MARKET
+  { path: '/', label: 'Dashboard', icon: LayoutDashboard, section: 'market' },
+  { path: '/markets', label: 'Markets', icon: BarChart3, section: 'market' },
+  { path: '/watchlist', label: 'Watchlist', icon: Star, section: 'market' },
+  { path: '/heatmap', label: 'Heatmap', icon: Flame, section: 'market' },
+  { path: '/news', label: 'News & Insights', icon: Newspaper, badge: 'NEW', badgeType: 'blue', section: 'market' },
+  
+  // ANALYTICS
+  { path: '/technical', label: 'Technical Analysis', icon: LineChart, section: 'analytics' },
+  { path: '/options', label: 'Options Analytics', icon: Binary, section: 'analytics' },
+  { path: '/signals', label: 'AI Signals', icon: Brain, section: 'analytics' },
+  { path: '/scanner', label: 'Market Scanner', icon: Search, section: 'analytics' },
+
+  // PORTFOLIO
+  { path: '/portfolio', label: 'Portfolio Overview', icon: Briefcase, section: 'portfolio' },
+  { path: '/holdings', label: 'Holdings', icon: FileSpreadsheet, section: 'portfolio' },
+  { path: '/performance', label: 'Performance', icon: Award, section: 'portfolio' },
+  { path: '/transactions', label: 'Transactions', icon: Activity, section: 'portfolio' },
+
+  // TOOLS
+  { path: '/calendar', label: 'Economic Calendar', icon: Calendar, section: 'tools' },
+  { path: '/alerts', label: 'Alerts', icon: BellRing, section: 'tools' },
+  { path: '/reports', label: 'Reports', icon: FileSpreadsheet, section: 'tools' },
 ];
 
 const sectionLabels: Record<string, string> = {
-  main: 'OVERVIEW',
+  market: 'MARKET',
   analytics: 'ANALYTICS',
+  portfolio: 'PORTFOLIO',
   tools: 'TOOLS',
-  system: 'SYSTEM',
 };
 
 export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle, onMobileClose, isMobile }) => {
   const location = useLocation();
-  const { t } = useLanguage();
 
   const groupedItems = navItems.reduce((acc, item) => {
     if (!acc[item.section]) acc[item.section] = [];
@@ -84,51 +104,37 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle, onMobileC
       </AnimatePresence>
 
       <motion.aside
-        className="fixed top-0 left-0 h-full z-50 flex flex-col bg-[#0d1117]/95 backdrop-blur-xl border-r border-white/[0.06] transition-all duration-300 ease-in-out"
+        className="fixed top-0 left-0 h-full z-50 flex flex-col bg-[#0b0d14] border-r border-white/[0.08] transition-all duration-300 ease-in-out font-sans select-none"
         style={{ width: collapsed && !isMobile ? 72 : 260 }}
       >
         {/* Logo */}
-        <div className="h-16 flex items-center px-5 border-b border-white/[0.06] shrink-0">
+        <div className="h-16 flex items-center px-5 border-b border-white/[0.08] shrink-0">
           <div className="flex items-center gap-3 overflow-hidden">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-blue-400 flex items-center justify-center shrink-0">
               <Activity className="w-4 h-4 text-white" />
             </div>
-            <AnimatePresence>
-              {(!collapsed || isMobile) && (
-                <motion.div
-                  initial={{ opacity: 0, width: 0 }}
-                  animate={{ opacity: 1, width: 'auto' }}
-                  exit={{ opacity: 0, width: 0 }}
-                  className="overflow-hidden whitespace-nowrap"
-                >
-                  <span className="text-base font-bold text-white tracking-tight">
-                    Analytics
-                  </span>
-                  <span className="text-base font-bold text-blue-400 tracking-tight">
-                    Pro
-                  </span>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            {(!collapsed || isMobile) && (
+              <div className="overflow-hidden whitespace-nowrap leading-tight">
+                <div className="text-sm font-bold text-white tracking-wide">
+                  Analytics <span className="text-blue-500 font-extrabold">Pro</span>
+                </div>
+                <div className="text-[8px] text-slate-500 font-mono tracking-widest uppercase mt-0.5">
+                  Stock Market Intelligence
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-6">
+        <nav className="flex-1 overflow-y-auto py-3 px-3 space-y-4 no-scrollbar">
           {Object.entries(groupedItems).map(([section, items]) => (
-            <div key={section}>
-              <AnimatePresence>
-                {(!collapsed || isMobile) && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="px-3 mb-2 text-[10px] font-semibold tracking-[0.15em] text-slate-500"
-                  >
-                    {sectionLabels[section]}
-                  </motion.div>
-                )}
-              </AnimatePresence>
+            <div key={section} className="space-y-1">
+              {(!collapsed || isMobile) && (
+                <div className="px-3 mb-1 text-[9px] font-bold tracking-[0.12em] text-slate-600">
+                  {sectionLabels[section]}
+                </div>
+              )}
 
               <div className="space-y-0.5">
                 {items.map((item) => {
@@ -144,40 +150,29 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle, onMobileC
                     >
                       <div
                         className={`
-                          relative flex items-center gap-3 px-3 py-2.5 rounded-lg
-                          transition-all duration-200 group
+                          relative flex items-center gap-2.5 px-3 py-2 rounded-md
+                          transition-all duration-150 group text-xs
                           ${isActive
-                            ? 'bg-blue-500/10 text-blue-400'
-                            : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'}
+                            ? 'bg-blue-600/10 text-blue-400 font-semibold'
+                            : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.03]'}
                         `}
                       >
-                        {/* Active indicator */}
                         {isActive && (
-                          <motion.div
-                            layoutId="sidebar-active"
-                            className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-blue-400 rounded-full"
-                            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                          />
+                          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-4 bg-blue-500 rounded-full" />
                         )}
 
-                        <Icon className={`w-[18px] h-[18px] shrink-0 ${isActive ? 'text-blue-400' : ''}`} />
+                        <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-blue-400' : 'text-slate-500 group-hover:text-slate-300'}`} />
 
-                        <AnimatePresence>
-                          {(!collapsed || isMobile) && (
-                            <motion.span
-                              initial={{ opacity: 0, width: 0 }}
-                              animate={{ opacity: 1, width: 'auto' }}
-                              exit={{ opacity: 0, width: 0 }}
-                              className="text-sm font-medium whitespace-nowrap overflow-hidden"
-                            >
-                              {t(item.labelKey)}
-                            </motion.span>
-                          )}
-                        </AnimatePresence>
+                        {(!collapsed || isMobile) && (
+                          <span className="truncate">{item.label}</span>
+                        )}
 
-                        {/* Badge */}
                         {item.badge && (!collapsed || isMobile) && (
-                          <span className="ml-auto text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400">
+                          <span className={`ml-auto text-[8px] font-bold px-1 py-0.2 rounded font-mono ${
+                            item.badgeType === 'blue'
+                              ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                              : 'bg-red-500/20 text-red-400 border border-red-500/30'
+                          }`}>
                             {item.badge}
                           </span>
                         )}
@@ -190,34 +185,59 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle, onMobileC
           ))}
         </nav>
 
-        {/* Bottom section */}
-        <div className="p-3 border-t border-white/[0.06] shrink-0">
-          {(!collapsed || isMobile) && (
-            <div className="glass rounded-lg p-3 mb-3">
-              <div className="flex items-center gap-2 mb-2">
-                <TrendingUp className="w-4 h-4 text-emerald-400" />
-                <span className="text-xs font-semibold text-emerald-400">Market Open</span>
+        {/* Upgrade to Pro Card */}
+        {(!collapsed || isMobile) && (
+          <div className="px-4 py-3 border-t border-white/[0.04] bg-white/[0.01]">
+            <div className="p-3 rounded-lg bg-gradient-to-br from-[#1b1c2b] to-[#121320] border border-violet-500/20 flex items-start gap-2.5">
+              <div className="w-7 h-7 rounded-md bg-violet-500/10 flex items-center justify-center shrink-0 mt-0.5">
+                <span className="text-xs text-violet-400">★</span>
               </div>
-              <p className="text-[10px] text-slate-500">
-                NYSE & NASDAQ · Closes 4:00 PM ET
-              </p>
+              <div className="min-w-0">
+                <span className="text-[11px] font-bold text-white block">Upgrade to Pro</span>
+                <span className="text-[9px] text-slate-500 block leading-tight mt-0.5">Unlock advanced options analytics & scanner</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Bottom Profile controls */}
+        <div className="p-3 border-t border-white/[0.08] bg-[#090b10] shrink-0">
+          <div className="space-y-0.5">
+            <NavLink to="/settings" className="block">
+              <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-md text-slate-400 hover:text-slate-200 hover:bg-white/[0.03] text-xs">
+                <Settings className="w-4 h-4 text-slate-500" />
+                {(!collapsed || isMobile) && <span>Settings</span>}
+              </div>
+            </NavLink>
+            <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-md text-slate-400 hover:text-slate-200 hover:bg-white/[0.03] text-xs cursor-pointer">
+              <HelpCircle className="w-4 h-4 text-slate-500" />
+              {(!collapsed || isMobile) && <span>Help & Support</span>}
+            </div>
+          </div>
+
+          {/* Profile Card */}
+          {(!collapsed || isMobile) && (
+            <div className="mt-3 p-2 rounded-lg bg-[#161a25] border border-white/[0.06] flex items-center justify-between">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="w-7 h-7 rounded-md bg-blue-600 flex items-center justify-center shrink-0">
+                  <span className="text-[10px] font-bold text-white">US</span>
+                </div>
+                <div className="min-w-0 leading-tight">
+                  <span className="text-xs font-bold text-slate-200 block truncate">Unith Sharma</span>
+                  <span className="text-[9px] text-slate-500 block font-mono">Premium Plan</span>
+                </div>
+              </div>
+              <ChevronDown className="w-3.5 h-3.5 text-slate-500" />
             </div>
           )}
 
-          {/* Collapse toggle - desktop only */}
+          {/* Collapse Button */}
           {!isMobile && (
             <button
               onClick={onToggle}
-              className="w-full flex items-center justify-center gap-2 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-white/[0.04] transition-colors"
+              className="w-full flex items-center justify-center gap-2 py-1.5 mt-2 rounded-md text-slate-500 hover:text-slate-300 hover:bg-white/[0.03] transition-colors"
             >
-              {collapsed ? (
-                <ChevronRight className="w-4 h-4" />
-              ) : (
-                <>
-                  <ChevronLeft className="w-4 h-4" />
-                  <span className="text-xs">Collapse</span>
-                </>
-              )}
+              {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
             </button>
           )}
         </div>

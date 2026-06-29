@@ -34,6 +34,12 @@
   --topbar-height: 64px;
 
   --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+
+  /* Fluid typography and spacing clamp tokens */
+  --font-fluid-title: clamp(1.5rem, 3.5vw, 2.25rem);
+  --font-fluid-subtitle: clamp(1rem, 2vw, 1.35rem);
+  --font-fluid-meta: clamp(0.7rem, 1.2vw, 0.85rem);
+  --spacing-fluid: clamp(1rem, 2vw, 1.5rem);
 }
 
 /* ===== Global Styles ===== */

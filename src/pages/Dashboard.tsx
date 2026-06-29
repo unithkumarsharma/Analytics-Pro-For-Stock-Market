@@ -290,7 +290,7 @@ const Dashboard: React.FC = () => {
               </div>
 
               {/* Asymmetrical columns matching weights */}
-              <div className="grid grid-cols-4 gap-2 h-[100px]">
+              <div className="grid grid-cols-4 gap-2 h-[110px]">
                 {/* Column 1: 2 items (IT, BANKING) */}
                 <div className="flex flex-col gap-2 h-full">
                   <div className="flex-1 min-h-0">{renderHeatmapCell(sectorHeatmapData[0])}</div>
@@ -512,7 +512,7 @@ const Dashboard: React.FC = () => {
                 </span>
 
                 {/* Tiny forecast chart */}
-                <div className="h-[28px] w-[90px]">
+                <div className="h-[36px] w-[90px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={aiForecastData}>
                       <defs>

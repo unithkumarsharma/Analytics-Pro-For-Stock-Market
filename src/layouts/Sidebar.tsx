@@ -16,6 +16,7 @@ import {
   Activity,
   TrendingUp,
 } from 'lucide-react';
+import { useLanguage, translations } from '../contexts/LanguageContext';
 
 interface SidebarProps {
   collapsed: boolean;
@@ -24,16 +25,24 @@ interface SidebarProps {
   isMobile?: boolean;
 }
 
-const navItems = [
-  { path: '/', label: 'Dashboard', icon: LayoutDashboard, section: 'main' },
-  { path: '/markets', label: 'Markets', icon: BarChart3, section: 'main' },
-  { path: '/portfolio', label: 'Portfolio', icon: Briefcase, section: 'main' },
-  { path: '/technical', label: 'Technical Analysis', icon: LineChart, section: 'analytics' },
-  { path: '/options', label: 'Options Analytics', icon: Binary, section: 'analytics' },
-  { path: '/signals', label: 'AI Signals', icon: Brain, badge: '5', section: 'analytics' },
-  { path: '/watchlist', label: 'Watchlist', icon: Star, section: 'tools' },
-  { path: '/news', label: 'News', icon: Newspaper, badge: '12', section: 'tools' },
-  { path: '/settings', label: 'Settings', icon: Settings, section: 'system' },
+interface NavItem {
+  path: string;
+  labelKey: keyof typeof translations['en'];
+  icon: React.ComponentType<any>;
+  badge?: string;
+  section: string;
+}
+
+const navItems: NavItem[] = [
+  { path: '/', labelKey: 'dashboard', icon: LayoutDashboard, section: 'main' },
+  { path: '/markets', labelKey: 'markets', icon: BarChart3, section: 'main' },
+  { path: '/portfolio', labelKey: 'portfolio', icon: Briefcase, section: 'main' },
+  { path: '/technical', labelKey: 'technicalAnalysis', icon: LineChart, section: 'analytics' },
+  { path: '/options', labelKey: 'optionsAnalytics', icon: Binary, section: 'analytics' },
+  { path: '/signals', labelKey: 'aiSignals', icon: Brain, badge: '5', section: 'analytics' },
+  { path: '/watchlist', labelKey: 'watchlist', icon: Star, section: 'tools' },
+  { path: '/news', labelKey: 'news', icon: Newspaper, badge: '12', section: 'tools' },
+  { path: '/settings', labelKey: 'settings', icon: Settings, section: 'system' },
 ];
 
 const sectionLabels: Record<string, string> = {
@@ -45,6 +54,7 @@ const sectionLabels: Record<string, string> = {
 
 export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle, onMobileClose, isMobile }) => {
   const location = useLocation();
+  const { t } = useLanguage();
 
   const groupedItems = navItems.reduce((acc, item) => {
     if (!acc[item.section]) acc[item.section] = [];
@@ -74,10 +84,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle, onMobileC
       </AnimatePresence>
 
       <motion.aside
-        className={`fixed top-0 left-0 h-full z-50 flex flex-col
-          bg-[#0d1117]/95 backdrop-blur-xl border-r border-white/[0.06]
-          ${isMobile ? (collapsed ? '-translate-x-full' : 'translate-x-0') : ''}
-          transition-all duration-300 ease-in-out`}
+        className="fixed top-0 left-0 h-full z-50 flex flex-col bg-[#0d1117]/95 backdrop-blur-xl border-r border-white/[0.06] transition-all duration-300 ease-in-out"
         style={{ width: collapsed && !isMobile ? 72 : 260 }}
       >
         {/* Logo */}
@@ -163,7 +170,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle, onMobileC
                               exit={{ opacity: 0, width: 0 }}
                               className="text-sm font-medium whitespace-nowrap overflow-hidden"
                             >
-                              {item.label}
+                              {t(item.labelKey)}
                             </motion.span>
                           )}
                         </AnimatePresence>

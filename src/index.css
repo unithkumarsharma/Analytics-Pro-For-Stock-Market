@@ -208,3 +208,53 @@ body {
   pointer-events: none;
   z-index: 9999;
 }
+
+/* ===== Theme Overrides ===== */
+.light-mode {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f1f5f9;
+  --bg-card: rgba(255, 255, 255, 0.7);
+  --bg-glass: rgba(255, 255, 255, 0.6);
+  --border-glass: rgba(0, 0, 0, 0.06);
+  --border-active: rgba(59, 130, 246, 0.4);
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --glass-shadow: 0 8px 32px rgba(148, 163, 184, 0.08);
+  --glow-blue: 0 0 15px rgba(59, 130, 246, 0.08);
+}
+
+.cyberpunk-mode {
+  --bg-primary: #050508;
+  --bg-secondary: #0d0e15;
+  --bg-tertiary: #1b1c2b;
+  --bg-card: rgba(13, 14, 21, 0.75);
+  --bg-glass: rgba(13, 14, 21, 0.6);
+  --border-glass: rgba(244, 63, 94, 0.15);
+  --border-active: rgba(244, 63, 94, 0.6);
+  --accent-blue: #f43f5e;
+  --accent-cyan: #d946ef;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --glow-blue: 0 0 20px rgba(244, 63, 94, 0.2);
+}
+
+.bloomberg-mode {
+  --bg-primary: #000000;
+  --bg-secondary: #080808;
+  --bg-tertiary: #121212;
+  --bg-card: rgba(8, 8, 8, 0.9);
+  --bg-glass: rgba(8, 8, 8, 0.85);
+  --border-glass: rgba(255, 153, 0, 0.15);
+  --border-active: rgba(255, 153, 0, 0.7);
+  --accent-blue: #ff9900;
+  --accent-cyan: #ffcc00;
+  --text-primary: #ff9900;
+  --text-secondary: #00ff00;
+  --text-muted: #777777;
+  --gain: #00ff00;
+  --loss: #ff0000;
+  --glow-blue: 0 0 20px rgba(255, 153, 0, 0.15);
+}
+

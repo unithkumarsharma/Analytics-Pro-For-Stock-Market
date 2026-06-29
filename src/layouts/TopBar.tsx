@@ -10,13 +10,21 @@ import {
 } from 'lucide-react';
 import { marketIndices } from '../data/mockData';
 import { formatNumber, formatPercent, getChangeColor } from '../utils/formatters';
+import { useNotifications } from '../contexts/NotificationContext';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface TopBarProps {
   onMenuClick: () => void;
+  onNotificationClick: () => void;
 }
 
-export const TopBar: React.FC<TopBarProps> = ({ onMenuClick }) => {
+export const TopBar: React.FC<TopBarProps> = ({ onMenuClick, onNotificationClick }) => {
   const [searchFocused, setSearchFocused] = useState(false);
+  const { notifications } = useNotifications();
+  const { t } = useLanguage();
+
+  const unreadCount = notifications.filter((n) => !n.read).length;
+
   const now = new Date();
   const timeString = now.toLocaleTimeString('en-US', {
     hour: '2-digit',
@@ -70,7 +78,7 @@ export const TopBar: React.FC<TopBarProps> = ({ onMenuClick }) => {
             <Search className="w-4 h-4 text-slate-500 absolute left-3" />
             <input
               type="text"
-              placeholder="Search symbols..."
+              placeholder={t('searchPlaceholder')}
               className="w-full py-2 pl-9 pr-3 bg-transparent text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none"
               onFocus={() => setSearchFocused(true)}
               onBlur={() => setSearchFocused(false)}
@@ -99,9 +107,16 @@ export const TopBar: React.FC<TopBarProps> = ({ onMenuClick }) => {
           </div>
 
           {/* Notifications */}
-          <button className="relative p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.04] transition-colors">
+          <button
+            onClick={onNotificationClick}
+            className="relative p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.04] transition-colors"
+          >
             <Bell className="w-4 h-4" />
-            <span className="absolute top-1 right-1 w-2 h-2 bg-blue-500 rounded-full" />
+            {unreadCount > 0 && (
+              <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-blue-500 text-[8px] font-bold text-white rounded-full flex items-center justify-center animate-bounce">
+                {unreadCount}
+              </span>
+            )}
           </button>
 
           {/* User */}

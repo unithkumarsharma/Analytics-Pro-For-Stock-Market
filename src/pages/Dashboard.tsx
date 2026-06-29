@@ -12,6 +12,8 @@ import {
   ArrowDownRight,
   GripVertical,
   RotateCcw,
+  Shield,
+  Zap,
 } from 'lucide-react';
 import { IndexCard } from '../components/cards/IndexCard';
 import { SentimentGauge } from '../components/ui/SentimentGauge';
@@ -27,7 +29,7 @@ import {
   indianSectorHeatmap,
   sentimentData,
 } from '../data/mockData';
-import { formatNumber, formatPercent, getChangeColor } from '../utils/formatters';
+import { formatNumber } from '../utils/formatters';
 
 const DEFAULT_WIDGET_ORDER = [
   'nifty',
@@ -78,7 +80,6 @@ const Dashboard: React.FC = () => {
   const handleDragStart = (e: React.DragEvent, index: number) => {
     setDraggedIndex(index);
     e.dataTransfer.effectAllowed = 'move';
-    // Create custom transparent drag image or styling
     if (e.currentTarget instanceof HTMLElement) {
       e.currentTarget.style.opacity = '0.4';
     }
@@ -115,7 +116,7 @@ const Dashboard: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-4">
         <div>
           <div className="skeleton h-8 w-48 rounded mb-2" />
           <div className="skeleton h-4 w-72 rounded" />
@@ -128,24 +129,24 @@ const Dashboard: React.FC = () => {
   const breadthTotal = marketBreadth.advances + marketBreadth.declines + marketBreadth.unchanged;
   const advancePct = (marketBreadth.advances / breadthTotal) * 100;
   const declinePct = (marketBreadth.declines / breadthTotal) * 100;
+  const unchangedPct = (marketBreadth.unchanged / breadthTotal) * 100;
 
   // Render Widget Helper based on ID
   const renderWidget = (id: string, index: number) => {
     const isDragging = draggedIndex === index;
     const isDragOver = dragOverIndex === index;
 
-    // Responsive Col Spans:
-    // - Nifty, Sensex, BankNifty, Sentiment: xl:col-span-3, md:col-span-6, col-span-12
-    // - Breadth, Heatmap: xl:col-span-6, col-span-12
-    // - Gainers, Losers: xl:col-span-6, col-span-12
+    // Col Spans using 12-column Grid:
+    // - Indices & Sentiment: xl:col-span-3, md:col-span-6, col-span-12
+    // - Breadth, Heatmap, Gainers, Losers: xl:col-span-6, col-span-12
     let colSpanClass = 'col-span-12';
-    if (['nifty', 'sensex', 'banknifty', 'sentiment'].includes(id)) {
+    if (['nifty', 'sensex', 'banknifty', 'sentiment', 'portfolio', 'aiOutlook'].includes(id)) {
       colSpanClass = 'col-span-12 md:col-span-6 xl:col-span-3';
     } else {
       colSpanClass = 'col-span-12 xl:col-span-6';
     }
 
-    const cardClass = `relative glass-card flex flex-col justify-between h-full select-none transition-all duration-200 ${
+    const cardClass = `relative glass-card flex flex-col justify-between h-full select-none transition-all duration-200 overflow-hidden rounded-lg border border-white/[0.08] bg-[#1a1d27] ${
       isDragging ? 'opacity-30 border-blue-500/30' : ''
     } ${isDragOver ? 'border-blue-500 bg-blue-500/[0.02] scale-[0.99]' : ''}`;
 
@@ -157,10 +158,10 @@ const Dashboard: React.FC = () => {
         onDragEnd={handleDragEnd}
         onDragOver={(e) => handleDragOver(e, index)}
         onDrop={(e) => handleDrop(e, index)}
-        className="flex items-center gap-1.5 p-2 bg-white/[0.02] border-b border-white/[0.04] cursor-grab active:cursor-grabbing text-slate-500 hover:text-slate-300 transition-colors rounded-t-2xl select-none"
+        className="flex items-center gap-1.5 px-3 py-1.5 bg-white/[0.02] border-b border-white/[0.04] cursor-grab active:cursor-grabbing text-slate-500 hover:text-slate-300 transition-colors select-none"
       >
-        <GripVertical className="w-3.5 h-3.5" />
-        <span className="text-[9px] font-mono tracking-wider uppercase">Drag to Reorder</span>
+        <GripVertical className="w-3 h-3" />
+        <span className="text-[8px] font-mono tracking-widest uppercase">Drag to Reorder</span>
       </div>
     );
 
@@ -175,7 +176,7 @@ const Dashboard: React.FC = () => {
           >
             <div className={cardClass}>
               {dragHeader}
-              <div className="flex-1 p-5">
+              <div className="flex-1 p-4 h-full flex flex-col justify-between">
                 <ErrorBoundary>
                   <IndexCard index={niftyIndex} accentColor="#2563eb" />
                 </ErrorBoundary>
@@ -194,7 +195,7 @@ const Dashboard: React.FC = () => {
           >
             <div className={cardClass}>
               {dragHeader}
-              <div className="flex-1 p-5">
+              <div className="flex-1 p-4 h-full flex flex-col justify-between">
                 <ErrorBoundary>
                   <IndexCard index={sensexIndex} accentColor="#7c3aed" />
                 </ErrorBoundary>
@@ -213,7 +214,7 @@ const Dashboard: React.FC = () => {
           >
             <div className={cardClass}>
               {dragHeader}
-              <div className="flex-1 p-5">
+              <div className="flex-1 p-4 h-full flex flex-col justify-between">
                 <ErrorBoundary>
                   <IndexCard index={bankNiftyIndex} accentColor="#0891b2" />
                 </ErrorBoundary>
@@ -232,29 +233,29 @@ const Dashboard: React.FC = () => {
           >
             <div className={cardClass}>
               {dragHeader}
-              <div className="flex-1 p-5 flex flex-col justify-between">
-                <div className="flex justify-between items-center mb-2">
+              <div className="flex-1 p-4 flex flex-col justify-between h-full">
+                <div className="flex justify-between items-center mb-1">
                   <div>
                     <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Market Sentiment</h3>
-                    <p className="text-[10px] text-slate-500 mt-0.5">FII/DII flow & volume bias</p>
+                    <p className="text-[9px] text-slate-500 leading-normal">FII/DII net flow bias</p>
                   </div>
-                  <Activity className="w-4 h-4 text-amber-500" />
+                  <Activity className="w-3.5 h-3.5 text-amber-500" />
                 </div>
                 
-                <div className="flex justify-center my-1">
-                  <SentimentGauge value={sentimentData.overall} size={135} label="Greed" />
+                <div className="flex-1 flex items-center justify-center my-2">
+                  <SentimentGauge value={sentimentData.overall} size={110} label="Greed" />
                 </div>
 
-                <div className="grid grid-cols-2 gap-3 border-t border-white/[0.04] pt-3 text-[10px] font-mono">
+                <div className="grid grid-cols-2 gap-2 border-t border-white/[0.04] pt-2 text-[9px] font-mono">
                   <div>
-                    <span className="text-slate-500 block">FII Net Flow</span>
-                    <span className={`font-bold ${sentimentData.fiiFlow >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                    <span className="text-slate-500 block">FII Net</span>
+                    <span className={`font-bold block ${sentimentData.fiiFlow >= 0 ? 'text-[#00c076]' : 'text-[#ff4d4f]'}`}>
                       {sentimentData.fiiFlow >= 0 ? '+' : ''}₹{sentimentData.fiiFlow.toLocaleString()} Cr
                     </span>
                   </div>
                   <div>
-                    <span className="text-slate-500 block">DII Net Flow</span>
-                    <span className={`font-bold ${sentimentData.diiFlow >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                    <span className="text-slate-500 block">DII Net</span>
+                    <span className={`font-bold block ${sentimentData.diiFlow >= 0 ? 'text-[#00c076]' : 'text-[#ff4d4f]'}`}>
                       {sentimentData.diiFlow >= 0 ? '+' : ''}₹{sentimentData.diiFlow.toLocaleString()} Cr
                     </span>
                   </div>
@@ -274,43 +275,43 @@ const Dashboard: React.FC = () => {
           >
             <div className={cardClass}>
               {dragHeader}
-              <div className="flex-1 p-5 flex flex-col justify-between">
+              <div className="flex-1 p-4 flex flex-col justify-between h-full">
                 <div>
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
-                      <BarChart3 className="w-4 h-4 text-blue-500" />
+                      <BarChart3 className="w-3.5 h-3.5 text-blue-500" />
                       <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Market Breadth</h3>
                     </div>
-                    <span className="text-[10px] font-mono text-slate-500">
-                      {breadthTotal.toLocaleString()} STOCKS ACTIVE
+                    <span className="text-[9px] font-mono text-slate-500">
+                      {breadthTotal.toLocaleString()} ACTIVE
                     </span>
                   </div>
 
-                  {/* Progress Bar */}
-                  <div className="h-3 rounded-full overflow-hidden flex bg-white/[0.02]">
-                    <div className="h-full bg-emerald-500" style={{ width: `${advancePct}%` }} />
-                    <div className="h-full bg-slate-700" style={{ width: `${(marketBreadth.unchanged / breadthTotal) * 100}%` }} />
-                    <div className="h-full bg-red-500" style={{ width: `${declinePct}%` }} />
+                  {/* Proportional Segmented Progress Bar */}
+                  <div className="h-2 rounded-full overflow-hidden flex bg-white/[0.02] mb-3">
+                    <div className="h-full bg-[#00c076]" style={{ width: `${advancePct}%` }} />
+                    <div className="h-full bg-slate-600" style={{ width: `${unchangedPct}%` }} />
+                    <div className="h-full bg-[#ff4d4f]" style={{ width: `${declinePct}%` }} />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-4 text-center mt-6 border-t border-white/[0.04] pt-4">
+                <div className="grid grid-cols-3 gap-2 text-center border-t border-white/[0.04] pt-2">
                   <div>
-                    <div className="text-[10px] text-slate-500 uppercase font-mono">Advances</div>
-                    <div className="text-sm font-bold text-emerald-400 font-mono mt-0.5">
-                      {marketBreadth.advances} <span className="text-xs font-normal text-slate-400">({advancePct.toFixed(0)}%)</span>
+                    <div className="text-[9px] text-slate-500 uppercase font-mono">Advances</div>
+                    <div className="text-xs font-bold text-[#00c076] font-mono mt-0.5">
+                      {marketBreadth.advances} <span className="text-[10px] font-normal text-slate-400">({advancePct.toFixed(0)}%)</span>
                     </div>
                   </div>
                   <div>
-                    <div className="text-[10px] text-slate-500 uppercase font-mono">Unchanged</div>
-                    <div className="text-sm font-bold text-slate-400 font-mono mt-0.5">
-                      {marketBreadth.unchanged}
+                    <div className="text-[9px] text-slate-500 uppercase font-mono">Unchanged</div>
+                    <div className="text-xs font-bold text-slate-400 font-mono mt-0.5">
+                      {marketBreadth.unchanged} <span className="text-[10px] font-normal text-slate-400">({unchangedPct.toFixed(0)}%)</span>
                     </div>
                   </div>
                   <div>
-                    <div className="text-[10px] text-slate-500 uppercase font-mono">Declines</div>
-                    <div className="text-sm font-bold text-red-400 font-mono mt-0.5">
-                      {marketBreadth.declines} <span className="text-xs font-normal text-slate-400">({declinePct.toFixed(0)}%)</span>
+                    <div className="text-[9px] text-slate-500 uppercase font-mono">Declines</div>
+                    <div className="text-xs font-bold text-[#ff4d4f] font-mono mt-0.5">
+                      {marketBreadth.declines} <span className="text-[10px] font-normal text-slate-400">({declinePct.toFixed(0)}%)</span>
                     </div>
                   </div>
                 </div>
@@ -329,36 +330,38 @@ const Dashboard: React.FC = () => {
           >
             <div className={cardClass}>
               {dragHeader}
-              <div className="flex-1 p-5">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-2">
-                    <Flame className="w-4 h-4 text-amber-500" />
+              <div className="flex-1 p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-1.5">
+                    <Flame className="w-3.5 h-3.5 text-amber-500" />
                     <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Sector Heatmap</h3>
                   </div>
-                  <span className="text-[10px] text-slate-500 font-mono uppercase">NSE Sectoral Indices</span>
+                  <span className="text-[9px] text-slate-500 font-mono uppercase">Indices change</span>
                 </div>
 
+                {/* 3-Column, 2-Row Uniform layout with exactly equal heights */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {indianSectorHeatmap.slice(0, 6).map((sector) => {
-                    const intensity = Math.min(Math.abs(sector.change) / 3, 1);
-                    const bg = sector.change >= 0
-                      ? `rgba(16, 185, 129, ${intensity * 0.18})`
-                      : `rgba(239, 68, 68, ${intensity * 0.18})`;
-                    const borderColor = sector.change >= 0
-                      ? `rgba(16, 185, 129, ${intensity * 0.15})`
-                      : `rgba(239, 68, 68, ${intensity * 0.15})`;
+                    const isUp = sector.change >= 0;
+                    const intensity = Math.min(Math.abs(sector.change) / 2.5, 1);
+                    const bg = isUp
+                      ? `rgba(0, 192, 118, ${intensity * 0.15})`
+                      : `rgba(255, 77, 79, ${intensity * 0.15})`;
+                    const borderColor = isUp
+                      ? `rgba(0, 192, 118, 0.12)`
+                      : `rgba(255, 77, 79, 0.12)`;
 
                     return (
                       <div
                         key={sector.name}
-                        className="p-3 rounded-lg border text-left transition-all"
+                        className="h-[64px] p-2.5 rounded border text-center flex flex-col justify-center items-center transition-all truncate"
                         style={{ backgroundColor: bg, borderColor }}
                       >
-                        <div className="text-[10px] font-semibold text-slate-400 truncate mb-1">
+                        <div className="text-[9px] font-bold text-slate-400 truncate w-full mb-0.5">
                           {sector.name}
                         </div>
-                        <div className={`text-base font-bold font-mono ${getChangeColor(sector.change)}`}>
-                          {formatPercent(sector.change)}
+                        <div className={`text-sm font-bold font-mono ${isUp ? 'text-[#00c076]' : 'text-[#ff4d4f]'}`}>
+                          {isUp ? '+' : ''}{sector.change.toFixed(2)}%
                         </div>
                       </div>
                     );
@@ -379,32 +382,30 @@ const Dashboard: React.FC = () => {
           >
             <div className={cardClass}>
               {dragHeader}
-              <div className="flex-1">
-                <div className="p-4 border-b border-white/[0.06] flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4 text-emerald-500" />
+              <div className="flex-1 pb-2">
+                <div className="px-4 py-3 border-b border-white/[0.06] flex items-center gap-1.5">
+                  <TrendingUp className="w-3.5 h-3.5 text-[#00c076]" />
                   <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Top Gainers (Nifty 50)</h3>
                 </div>
-                <div className="divide-y divide-white/[0.03] overflow-x-auto">
-                  <div className="min-w-[320px]">
-                    {topGainers.slice(0, 5).map((stock, i) => (
-                      <div key={stock.symbol} className="flex justify-between items-center px-4 py-3 hover:bg-white/[0.01] transition-colors">
-                        <div className="flex items-center gap-3">
-                          <span className="text-[10px] font-mono text-slate-600 w-3">{i + 1}</span>
-                          <div>
-                            <span className="text-xs font-semibold text-slate-200">{stock.symbol}</span>
-                            <span className="text-[10px] text-slate-500 ml-2 hidden sm:inline">{stock.name}</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-4 text-right">
-                          <span className="text-xs font-mono text-slate-300">₹{formatNumber(stock.price)}</span>
-                          <span className="inline-flex items-center gap-0.5 text-xs font-mono font-bold text-emerald-400 min-w-[70px] justify-end">
-                            <ArrowUpRight className="w-3.5 h-3.5" />
-                            +{stock.changePercent.toFixed(2)}%
-                          </span>
+                <div className="divide-y divide-white/[0.03]">
+                  {topGainers.slice(0, 5).map((stock, i) => (
+                    <div key={stock.symbol} className="grid grid-cols-12 items-center px-4 py-2 hover:bg-white/[0.01] transition-colors gap-2 text-xs h-[48px]">
+                      <div className="col-span-6 flex items-center gap-2.5 min-w-0">
+                        <span className="text-[9px] font-mono text-slate-600 w-3">{i + 1}</span>
+                        <div className="min-w-0 truncate">
+                          <span className="font-semibold text-slate-200 block truncate leading-tight">{stock.symbol}</span>
+                          <span className="text-[9px] text-slate-500 block truncate leading-normal">{stock.name}</span>
                         </div>
                       </div>
-                    ))}
-                  </div>
+                      <div className="col-span-3 text-right font-mono text-slate-300">
+                        ₹{formatNumber(stock.price)}
+                      </div>
+                      <div className="col-span-3 text-right font-mono font-bold flex items-center justify-end gap-0.5 text-[#00c076]">
+                        <ArrowUpRight className="w-3 h-3" />
+                        <span>+{stock.changePercent.toFixed(2)}%</span>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -421,32 +422,76 @@ const Dashboard: React.FC = () => {
           >
             <div className={cardClass}>
               {dragHeader}
-              <div className="flex-1">
-                <div className="p-4 border-b border-white/[0.06] flex items-center gap-2">
-                  <TrendingDown className="w-4 h-4 text-red-500" />
+              <div className="flex-1 pb-2">
+                <div className="px-4 py-3 border-b border-white/[0.06] flex items-center gap-1.5">
+                  <TrendingDown className="w-3.5 h-3.5 text-[#ff4d4f]" />
                   <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Top Losers (Nifty 50)</h3>
                 </div>
-                <div className="divide-y divide-white/[0.03] overflow-x-auto">
-                  <div className="min-w-[320px]">
-                    {topLosers.slice(0, 5).map((stock, i) => (
-                      <div key={stock.symbol} className="flex justify-between items-center px-4 py-3 hover:bg-white/[0.01] transition-colors">
-                        <div className="flex items-center gap-3">
-                          <span className="text-[10px] font-mono text-slate-600 w-3">{i + 1}</span>
-                          <div>
-                            <span className="text-xs font-semibold text-slate-200">{stock.symbol}</span>
-                            <span className="text-[10px] text-slate-500 ml-2 hidden sm:inline">{stock.name}</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-4 text-right">
-                          <span className="text-xs font-mono text-slate-300">₹{formatNumber(stock.price)}</span>
-                          <span className="inline-flex items-center gap-0.5 text-xs font-mono font-bold text-red-400 min-w-[70px] justify-end">
-                            <ArrowDownRight className="w-3.5 h-3.5" />
-                            {stock.changePercent.toFixed(2)}%
-                          </span>
+                <div className="divide-y divide-white/[0.03]">
+                  {topLosers.slice(0, 5).map((stock, i) => (
+                    <div key={stock.symbol} className="grid grid-cols-12 items-center px-4 py-2 hover:bg-white/[0.01] transition-colors gap-2 text-xs h-[48px]">
+                      <div className="col-span-6 flex items-center gap-2.5 min-w-0">
+                        <span className="text-[9px] font-mono text-slate-600 w-3">{i + 1}</span>
+                        <div className="min-w-0 truncate">
+                          <span className="font-semibold text-slate-200 block truncate leading-tight">{stock.symbol}</span>
+                          <span className="text-[9px] text-slate-500 block truncate leading-normal">{stock.name}</span>
                         </div>
                       </div>
-                    ))}
-                  </div>
+                      <div className="col-span-3 text-right font-mono text-slate-300">
+                        ₹{formatNumber(stock.price)}
+                      </div>
+                      <div className="col-span-3 text-right font-mono font-bold flex items-center justify-end gap-0.5 text-[#ff4d4f]">
+                        <ArrowDownRight className="w-3 h-3" />
+                        <span>{stock.changePercent.toFixed(2)}%</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'portfolio':
+        return (
+          <div
+            key={id}
+            className={`${colSpanClass} transition-all`}
+            onDragOver={(e) => handleDragOver(e, index)}
+            onDrop={(e) => handleDrop(e, index)}
+          >
+            <div className={cardClass}>
+              {dragHeader}
+              <div className="flex-1 p-4 flex flex-col justify-center items-center text-center">
+                <span className="text-[10px] text-slate-500 uppercase tracking-wider font-mono">Portfolio Value</span>
+                <h2 className="text-xl font-bold text-white font-mono mt-1 mb-2">₹28,47,392</h2>
+                <span className="text-[10px] text-[#00c076] font-mono">+₹42,187 (+1.50%) today</span>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'aiOutlook':
+        return (
+          <div
+            key={id}
+            className={`${colSpanClass} transition-all`}
+            onDragOver={(e) => handleDragOver(e, index)}
+            onDrop={(e) => handleDrop(e, index)}
+          >
+            <div className={cardClass}>
+              {dragHeader}
+              <div className="flex-1 p-4 flex flex-col justify-between">
+                <div className="flex items-center gap-1.5 mb-2">
+                  <Shield className="w-3.5 h-3.5 text-blue-400" />
+                  <span className="text-[10px] text-slate-400 uppercase tracking-wider font-mono">AI Outlook Report</span>
+                </div>
+                <p className="text-xs text-slate-300 leading-relaxed mb-3 pr-1">
+                  Indian markets showing consolidation range. IT & Auto sectors lead performance trends.
+                </p>
+                <div className="flex items-center justify-between text-[9px] text-slate-500 border-t border-white/[0.04] pt-2">
+                  <span className="flex items-center gap-1"><Zap className="w-3 h-3 text-[#00c076]" /> Target: 25,000</span>
+                  <span>Support: 24,500</span>
                 </div>
               </div>
             </div>
@@ -459,7 +504,7 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* ===== Page Header ===== */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
@@ -499,8 +544,8 @@ const Dashboard: React.FC = () => {
         </div>
       </motion.div>
 
-      {/* ===== Widgets Grid System ===== */}
-      <div className="grid grid-cols-12 gap-5">
+      {/* ===== Widgets Grid System - Enforce consistent gap: 12px (gap-3) ===== */}
+      <div className="grid grid-cols-12 gap-3">
         {widgets.map((id, index) => renderWidget(id, index))}
       </div>
     </div>

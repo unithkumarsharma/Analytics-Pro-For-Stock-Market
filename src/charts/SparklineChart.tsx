@@ -41,10 +41,11 @@ export const SparklineChart: React.FC<SparklineChartProps> = ({
 
   return (
     <svg
-      width={width}
+      width="100%"
       height={height}
       viewBox={`0 0 ${width} ${height}`}
       className={className}
+      preserveAspectRatio="none"
       style={{ overflow: 'visible' }}
     >
       <defs>

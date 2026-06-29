@@ -17,30 +17,30 @@ export const IndexCard: React.FC<IndexCardProps> = ({
   accentColor = '#3b82f6',
 }) => {
   const isPositive = index.change >= 0;
-  const changeColor = isPositive ? '#10b981' : '#ef4444';
+  const changeColor = isPositive ? '#00c076' : '#ff4d4f';
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay }}
-      className="glass-card p-5"
+      className="glass-card p-4 h-full flex flex-col justify-between"
     >
       <div className="relative z-10">
         {/* Header */}
-        <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             <div
-              className="w-8 h-8 rounded-lg flex items-center justify-center"
-              style={{ backgroundColor: `${accentColor}15` }}
+              className="w-7 h-7 rounded-md flex items-center justify-center"
+              style={{ backgroundColor: `${accentColor}12` }}
             >
-              <Activity className="w-4 h-4" style={{ color: accentColor }} />
+              <Activity className="w-3.5 h-3.5" style={{ color: accentColor }} />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-white leading-tight">
+              <h3 className="text-xs font-bold text-white leading-tight">
                 {index.symbol}
               </h3>
-              <p className="text-[10px] text-slate-500">{index.name}</p>
+              <p className="text-[9px] text-slate-500 font-medium uppercase tracking-wider">{index.name}</p>
             </div>
           </div>
           <div className="live-dot" />
@@ -77,13 +77,13 @@ export const IndexCard: React.FC<IndexCardProps> = ({
         </div>
 
         {/* Sparkline */}
-        <div className="mb-3">
+        <div className="h-10 w-full mb-3 overflow-hidden">
           <SparklineChart
             data={index.sparkline}
-            width={220}
-            height={40}
+            width={180}
+            height={36}
             color={changeColor}
-            strokeWidth={1.5}
+            strokeWidth={1.2}
           />
         </div>
 

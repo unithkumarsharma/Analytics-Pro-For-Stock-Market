@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowUpRight, ArrowDownRight, Activity } from 'lucide-react';
+import { ArrowUpRight, ArrowDownRight } from 'lucide-react';
 import { SparklineChart } from '../../charts/SparklineChart';
 import { AnimatedCounter } from '../ui/AnimatedCounter';
 import type { IndianIndex } from '../../types';
@@ -14,7 +14,6 @@ interface IndexCardProps {
 export const IndexCard: React.FC<IndexCardProps> = ({
   index,
   delay = 0,
-  accentColor = '#3b82f6',
 }) => {
   const isPositive = index.change >= 0;
   const changeColor = isPositive ? '#00c076' : '#ff4d4f';
@@ -28,22 +27,13 @@ export const IndexCard: React.FC<IndexCardProps> = ({
     >
       <div className="relative z-10">
         {/* Header */}
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-2">
-            <div
-              className="w-7 h-7 rounded-md flex items-center justify-center"
-              style={{ backgroundColor: `${accentColor}12` }}
-            >
-              <Activity className="w-3.5 h-3.5" style={{ color: accentColor }} />
-            </div>
-            <div>
-              <h3 className="text-xs font-bold text-white leading-tight">
-                {index.symbol}
-              </h3>
-              <p className="text-[9px] text-slate-500 font-medium uppercase tracking-wider">{index.name}</p>
-            </div>
+        <div className="flex items-start justify-between mb-2 select-none">
+          <div>
+            <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wide">
+              {index.symbol}
+            </h3>
+            <p className="text-[9px] text-slate-500 font-mono mt-0.5">{index.name}</p>
           </div>
-          <div className="live-dot" />
         </div>
 
         {/* Value */}
@@ -77,38 +67,25 @@ export const IndexCard: React.FC<IndexCardProps> = ({
         </div>
 
         {/* Sparkline */}
-        <div className="h-10 w-full mb-3 overflow-hidden">
+        <div className="h-12 w-full mb-4 overflow-hidden">
           <SparklineChart
             data={index.sparkline}
             width={180}
-            height={36}
+            height={44}
             color={changeColor}
-            strokeWidth={1.2}
+            strokeWidth={1.5}
           />
         </div>
 
-        {/* OHLC Stats */}
-        <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 pt-3 border-t border-white/[0.04]">
-          {[
-            { label: 'Open', value: index.open },
-            { label: 'Prev Close', value: index.prevClose },
-            { label: 'High', value: index.high },
-            { label: 'Low', value: index.low },
-          ].map((stat) => (
-            <div key={stat.label} className="flex items-center justify-between">
-              <span className="text-[10px] text-slate-500">{stat.label}</span>
-              <span className="text-[10px] font-mono text-slate-400">
-                {stat.value.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
-              </span>
-            </div>
-          ))}
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] text-slate-500">Volume</span>
-            <span className="text-[10px] font-mono text-slate-400">{index.volume}</span>
+        {/* Muted High / Low Footer Row */}
+        <div className="flex items-center justify-between text-[10px] text-slate-500 font-mono pt-3.5 border-t border-white/[0.04] mt-auto select-none">
+          <div className="flex items-center gap-1">
+            <span>High</span>
+            <span className="text-slate-400 font-bold">{index.high.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
           </div>
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] text-slate-500">Turnover</span>
-            <span className="text-[10px] font-mono text-slate-400">{index.turnover}</span>
+          <div className="flex items-center gap-1">
+            <span>Low</span>
+            <span className="text-slate-400 font-bold">{index.low.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
           </div>
         </div>
       </div>

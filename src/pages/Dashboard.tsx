@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import {
   CheckCircle2,
+  ArrowUpRight,
+  Flame,
+  BarChart3,
+  Activity,
 } from 'lucide-react';
 import { IndexCard } from '../components/cards/IndexCard';
 import { SentimentGauge } from '../components/ui/SentimentGauge';
@@ -15,7 +19,6 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { formatNumber } from '../utils/formatters';
-
 
 const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
@@ -39,7 +42,7 @@ const Dashboard: React.FC = () => {
     );
   }
 
-  // Exact mockup data values conforming to IndianIndex type
+  // Conforming to IndianIndex type
   const niftyData = {
     symbol: 'NIFTY 50',
     name: 'NSE',
@@ -89,16 +92,16 @@ const Dashboard: React.FC = () => {
   };
 
   const sectorHeatmapData = [
-    { name: 'IT', change: 3.42 },
-    { name: 'PHARMA', change: 1.92 },
-    { name: 'ENERGY', change: -1.68 },
-    { name: 'CONSUMER GOODS', change: 1.64 },
-    { name: 'BANKING', change: -1.24 },
-    { name: 'FINANCIAL SERVICES', change: 0.84 },
-    { name: 'METAL', change: 0.42 },
-    { name: 'INFRASTRUCTURE', change: 0.18 },
-    { name: 'AUTO', change: 2.84 },
-    { name: 'FMCG', change: 0.84 },
+    { name: 'IT', change: 3.42 }, // Col 1 Item 0
+    { name: 'PHARMA', change: 1.92 }, // Col 2 Item 0
+    { name: 'ENERGY', change: -1.68 }, // Col 3 Item 0
+    { name: 'CONSUMER GOODS', change: 1.64 }, // Col 4 Item 0
+    { name: 'BANKING', change: -1.24 }, // Col 1 Item 1
+    { name: 'FINANCIAL SERVICES', change: 0.84 }, // Col 2 Item 1
+    { name: 'METAL', change: 0.42 }, // Col 3 Item 1
+    { name: 'INFRASTRUCTURE', change: 0.18 }, // Col 4 Item 1
+    { name: 'AUTO', change: 2.84 }, // Col 2 Item 2
+    { name: 'FMCG', change: 0.84 }, // Col 3 Item 2
   ];
 
   const gainersList = [
@@ -126,13 +129,13 @@ const Dashboard: React.FC = () => {
 
   // Nifty 50 main chart mock data
   const chartTimelineData = [
-    { time: '09:15', price: 24520, volume: 15000 },
-    { time: '10:00', price: 24580, volume: 22000 },
-    { time: '11:00', price: 24510, volume: 18000 },
-    { time: '12:00', price: 24640, volume: 32000 },
-    { time: '13:00', price: 24690, volume: 28000 },
-    { time: '14:00', price: 24710, volume: 25000 },
-    { time: '15:00', price: 24782, volume: 45000 },
+    { time: '09:15', price: 24520 },
+    { time: '10:00', price: 24580 },
+    { time: '11:00', price: 24510 },
+    { time: '12:00', price: 24640 },
+    { time: '13:00', price: 24690 },
+    { time: '14:00', price: 24710 },
+    { time: '15:00', price: 24782 },
   ];
 
   // AI Outlook forecast line data
@@ -145,10 +148,34 @@ const Dashboard: React.FC = () => {
     { day: 'Day 6', price: 25040 },
   ];
 
+  const renderHeatmapCell = (sector: typeof sectorHeatmapData[0]) => {
+    const isUp = sector.change >= 0;
+    const intensity = Math.min(Math.abs(sector.change) / 2.5, 1);
+    const bg = isUp
+      ? `rgba(0, 192, 118, ${intensity * 0.15})`
+      : `rgba(255, 77, 79, ${intensity * 0.15})`;
+    const borderColor = isUp
+      ? `rgba(0, 192, 118, 0.15)`
+      : `rgba(255, 77, 79, 0.15)`;
 
+    return (
+      <div
+        key={sector.name}
+        className="p-2 rounded border text-left flex flex-col justify-center transition-all truncate h-full"
+        style={{ backgroundColor: bg, borderColor }}
+      >
+        <span className="text-[8px] font-bold text-slate-400 truncate w-full uppercase tracking-wider block">
+          {sector.name}
+        </span>
+        <span className={`text-[10px] font-bold font-mono ${isUp ? 'text-[#00c076]' : 'text-[#ff4d4f]'} mt-0.5 block`}>
+          {isUp ? '+' : ''}{sector.change.toFixed(2)}%
+        </span>
+      </div>
+    );
+  };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {/* ===== Row 1: Index Cards & Market Sentiment ===== */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
         <ErrorBoundary>
@@ -163,7 +190,7 @@ const Dashboard: React.FC = () => {
         
         {/* Market Sentiment Card */}
         <ErrorBoundary>
-          <div className="glass-card p-4 flex flex-col justify-between h-full bg-[#1a1d27] border border-white/[0.08] rounded-lg">
+          <div className="glass-card p-4 flex flex-col justify-between h-full bg-[#161925] border border-white/[0.08] rounded-lg">
             <div className="flex justify-between items-center mb-1">
               <div>
                 <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono">Market Sentiment</h3>
@@ -172,14 +199,16 @@ const Dashboard: React.FC = () => {
               <span className="text-xs font-mono font-bold text-slate-200">72 / 100</span>
             </div>
             
-            <div className="flex-1 flex items-center justify-center my-2">
+            <div className="flex-1 flex items-center justify-center my-1.5">
               <SentimentGauge value={72} size={110} label="Greed" />
             </div>
 
-            <div className="grid grid-cols-2 gap-2 border-t border-white/[0.04] pt-2 text-[9px] font-mono">
+            <div className="grid grid-cols-2 gap-2 border-t border-white/[0.04] pt-2.5 text-[9px] font-mono select-none">
               <div>
                 <span className="text-slate-500 block">Today</span>
-                <span className="font-bold text-[#00c076]">▲ 12</span>
+                <span className="font-bold text-[#00c076] flex items-center gap-0.5">
+                  <ArrowUpRight className="w-2.5 h-2.5" /> 12
+                </span>
               </div>
               <div>
                 <span className="text-slate-500 block">Yesterday</span>
@@ -193,16 +222,17 @@ const Dashboard: React.FC = () => {
       {/* ===== Row 2: Market Breadth & Sector Heatmap ===== */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
         {/* Market Breadth */}
-        <div className="col-span-12 lg:col-span-5 glass-card p-4 bg-[#1a1d27] border border-white/[0.08] rounded-lg flex flex-col justify-between">
+        <div className="col-span-12 lg:col-span-5 glass-card p-4 bg-[#161925] border border-white/[0.08] rounded-lg flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center justify-between mb-2">
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono">Market Breadth</span>
               <span className="text-[9px] font-mono text-slate-500">3382 STOCKS</span>
             </div>
+            
             <div className="grid grid-cols-12 items-center gap-3">
               {/* Advances column */}
               <div className="col-span-3 text-left">
-                <span className="text-[10px] text-slate-500 block uppercase font-mono">Advances</span>
+                <span className="text-[9px] text-slate-500 block uppercase font-mono">Advances</span>
                 <span className="text-sm font-extrabold text-[#00c076] block font-mono mt-0.5">1847</span>
                 <span className="text-[9px] text-slate-400 block font-mono">(55%)</span>
               </div>
@@ -215,7 +245,7 @@ const Dashboard: React.FC = () => {
 
               {/* Declines column */}
               <div className="col-span-3 text-right">
-                <span className="text-[10px] text-slate-500 block uppercase font-mono">Declines</span>
+                <span className="text-[9px] text-slate-500 block uppercase font-mono">Declines</span>
                 <span className="text-sm font-extrabold text-[#ff4d4f] block font-mono mt-0.5">1423</span>
                 <span className="text-[9px] text-slate-400 block font-mono">(42%)</span>
               </div>
@@ -224,38 +254,35 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Sector Heatmap */}
-        <div className="col-span-12 lg:col-span-7 glass-card p-4 bg-[#1a1d27] border border-white/[0.08] rounded-lg">
-          <div className="flex items-center justify-between mb-2.5">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono">Sector Heatmap</span>
-            <span className="text-[9px] text-slate-500 font-mono uppercase">Indices change</span>
-          </div>
+        <div className="col-span-12 lg:col-span-7 glass-card p-4 bg-[#161925] border border-white/[0.08] rounded-lg flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono flex items-center gap-1">
+                <Flame className="w-3.5 h-3.5 text-amber-500" />
+                Sector Heatmap
+              </span>
+              <span className="text-[9px] text-slate-500 font-mono uppercase">INDICES CHANGE</span>
+            </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
-            {sectorHeatmapData.map((sector) => {
-              const isUp = sector.change >= 0;
-              const intensity = Math.min(Math.abs(sector.change) / 2.5, 1);
-              const bg = isUp
-                ? `rgba(0, 192, 118, ${intensity * 0.15})`
-                : `rgba(255, 77, 79, ${intensity * 0.15})`;
-              const borderColor = isUp
-                ? `rgba(0, 192, 118, 0.15)`
-                : `rgba(255, 77, 79, 0.15)`;
-
-              return (
-                <div
-                  key={sector.name}
-                  className="h-[56px] p-2 rounded border text-left flex flex-col justify-center transition-all truncate"
-                  style={{ backgroundColor: bg, borderColor }}
-                >
-                  <div className="text-[8px] font-bold text-slate-400 truncate w-full mb-0.5">
-                    {sector.name}
-                  </div>
-                  <div className={`text-xs font-bold font-mono ${isUp ? 'text-[#00c076]' : 'text-[#ff4d4f]'}`}>
-                    {isUp ? '+' : ''}{sector.change.toFixed(2)}%
-                  </div>
-                </div>
-              );
-            })}
+            {/* Asymmetrical columns matching mockup exactly */}
+            <div className="grid grid-cols-4 gap-2 h-[116px]">
+              {/* Column 1: 2 items (IT, BANKING) */}
+              <div className="grid grid-rows-2 gap-2 h-full">
+                {[sectorHeatmapData[0], sectorHeatmapData[4]].map(renderHeatmapCell)}
+              </div>
+              {/* Column 2: 3 items (PHARMA, FINANCIAL SERVICES, AUTO) */}
+              <div className="grid grid-rows-3 gap-2 h-full">
+                {[sectorHeatmapData[1], sectorHeatmapData[5], sectorHeatmapData[8]].map(renderHeatmapCell)}
+              </div>
+              {/* Column 3: 3 items (ENERGY, METAL, FMCG) */}
+              <div className="grid grid-rows-3 gap-2 h-full">
+                {[sectorHeatmapData[2], sectorHeatmapData[6], sectorHeatmapData[9]].map(renderHeatmapCell)}
+              </div>
+              {/* Column 4: 2 items (CONSUMER GOODS, INFRASTRUCTURE) */}
+              <div className="grid grid-rows-2 gap-2 h-full">
+                {[sectorHeatmapData[3], sectorHeatmapData[7]].map(renderHeatmapCell)}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -263,14 +290,14 @@ const Dashboard: React.FC = () => {
       {/* ===== Row 3: Top Gainers, Top Losers, Market News ===== */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
         {/* Top Gainers */}
-        <div className="glass-card bg-[#1a1d27] border border-white/[0.08] rounded-lg flex flex-col justify-between">
+        <div className="glass-card bg-[#161925] border border-white/[0.08] rounded-lg flex flex-col justify-between">
           <div>
-            <div className="px-4 py-3 border-b border-white/[0.06] flex items-center justify-between">
+            <div className="px-4 py-2.5 border-b border-white/[0.06] flex items-center justify-between">
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono">Top Gainers</span>
             </div>
             <div className="divide-y divide-white/[0.03]">
               {gainersList.map((stock, i) => (
-                <div key={stock.symbol} className="grid grid-cols-12 items-center px-4 py-2 text-xs h-[44px]">
+                <div key={stock.symbol} className="grid grid-cols-12 items-center px-4 py-2 text-[11px] h-[40px]">
                   <div className="col-span-6 flex items-center gap-2 truncate">
                     <span className="text-[9px] font-mono text-slate-600 w-3">{i + 1}</span>
                     <span className="font-semibold text-slate-200 truncate">{stock.symbol}</span>
@@ -285,22 +312,22 @@ const Dashboard: React.FC = () => {
               ))}
             </div>
           </div>
-          <div className="px-4 py-2.5 border-t border-white/[0.04]">
-            <span className="text-[10px] font-bold text-blue-400 hover:text-blue-300 transition-colors cursor-pointer">
+          <div className="px-4 py-2 border-t border-white/[0.04] bg-white/[0.01]">
+            <span className="text-[10px] font-bold text-blue-400 hover:text-blue-300 transition-colors cursor-pointer block">
               View All Gainers &gt;
             </span>
           </div>
         </div>
 
         {/* Top Losers */}
-        <div className="glass-card bg-[#1a1d27] border border-white/[0.08] rounded-lg flex flex-col justify-between">
+        <div className="glass-card bg-[#161925] border border-white/[0.08] rounded-lg flex flex-col justify-between">
           <div>
-            <div className="px-4 py-3 border-b border-white/[0.06] flex items-center justify-between">
+            <div className="px-4 py-2.5 border-b border-white/[0.06] flex items-center justify-between">
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono">Top Losers</span>
             </div>
             <div className="divide-y divide-white/[0.03]">
               {losersList.map((stock, i) => (
-                <div key={stock.symbol} className="grid grid-cols-12 items-center px-4 py-2 text-xs h-[44px]">
+                <div key={stock.symbol} className="grid grid-cols-12 items-center px-4 py-2 text-[11px] h-[40px]">
                   <div className="col-span-6 flex items-center gap-2 truncate">
                     <span className="text-[9px] font-mono text-slate-600 w-3">{i + 1}</span>
                     <span className="font-semibold text-slate-200 truncate">{stock.symbol}</span>
@@ -315,27 +342,30 @@ const Dashboard: React.FC = () => {
               ))}
             </div>
           </div>
-          <div className="px-4 py-2.5 border-t border-white/[0.04]">
-            <span className="text-[10px] font-bold text-red-400 hover:text-red-300 transition-colors cursor-pointer">
+          <div className="px-4 py-2 border-t border-white/[0.04] bg-white/[0.01]">
+            <span className="text-[10px] font-bold text-red-400 hover:text-red-300 transition-colors cursor-pointer block">
               View All Losers &gt;
             </span>
           </div>
         </div>
 
         {/* Market News */}
-        <div className="glass-card bg-[#1a1d27] border border-white/[0.08] rounded-lg flex flex-col justify-between">
+        <div className="glass-card bg-[#161925] border border-white/[0.08] rounded-lg flex flex-col justify-between">
           <div>
-            <div className="px-4 py-3 border-b border-white/[0.06] flex items-center justify-between">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono">Market News</span>
-              <span className="text-[9px] text-blue-400 hover:text-blue-300 transition-colors cursor-pointer">View All</span>
+            <div className="px-4 py-2.5 border-b border-white/[0.06] flex items-center justify-between">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono flex items-center gap-1.5">
+                <BarChart3 className="w-3.5 h-3.5 text-blue-400" />
+                Market News
+              </span>
+              <span className="text-[9px] text-blue-400 hover:text-blue-300 transition-colors cursor-pointer font-bold">View All</span>
             </div>
             <div className="divide-y divide-white/[0.03] px-4">
               {marketNewsList.map((news) => (
-                <div key={news.title} className="py-2.5 min-w-0">
-                  <p className="text-[11px] font-semibold text-slate-200 leading-snug line-clamp-2 hover:text-blue-400 transition-colors cursor-pointer">
+                <div key={news.title} className="py-2 min-w-0">
+                  <p className="text-[11px] font-semibold text-slate-200 leading-snug line-clamp-1 hover:text-blue-400 transition-colors cursor-pointer">
                     {news.title}
                   </p>
-                  <div className="flex items-center gap-2 text-[9px] text-slate-500 font-mono mt-1">
+                  <div className="flex items-center gap-2 text-[9px] text-slate-500 font-mono mt-0.5">
                     <span>{news.source}</span>
                     <span>•</span>
                     <span>{news.time}</span>
@@ -350,14 +380,15 @@ const Dashboard: React.FC = () => {
       {/* ===== Row 4: Chart View & AI Market Outlook ===== */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
         {/* Nifty 50 Chart */}
-        <div className="col-span-12 lg:col-span-8 glass-card p-4 bg-[#1a1d27] border border-white/[0.08] rounded-lg">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
+        <div className="col-span-12 lg:col-span-8 glass-card p-4 bg-[#161925] border border-white/[0.08] rounded-lg">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono">NIFTY 50 CHART</span>
               <span className="text-xs font-mono font-bold text-[#00c076] ml-2">
                 24,782.45 <span className="text-[10px] font-normal font-sans text-slate-400">+287.35 (1.17%)</span>
               </span>
             </div>
+            
             {/* Timeline switch buttons */}
             <div className="flex gap-1.5 bg-[#11131c] border border-white/[0.06] rounded p-0.5 text-[10px] font-mono select-none self-start">
               {['1D', '1W', '1M', '3M', '1Y', '5Y'].map((time) => (
@@ -373,7 +404,7 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
 
-          <div className="h-[200px] w-full">
+          <div className="h-[148px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={chartTimelineData}>
                 <defs>
@@ -392,21 +423,24 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* AI Market Outlook */}
-        <div className="col-span-12 lg:col-span-4 glass-card p-4 bg-[#1a1d27] border border-white/[0.08] rounded-lg flex flex-col justify-between">
+        <div className="col-span-12 lg:col-span-4 glass-card p-4 bg-[#161925] border border-white/[0.08] rounded-lg flex flex-col justify-between">
           <div>
-            <div className="flex justify-between items-center mb-3">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono">AI Market Outlook</span>
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono flex items-center gap-1.5">
+                <Activity className="w-3.5 h-3.5 text-blue-400" />
+                AI Market Outlook
+              </span>
               <span className="text-[9px] text-[#00c076] font-bold font-mono">Confidence: 72% &gt;</span>
             </div>
             
-            <div className="flex items-center gap-1.5 mb-2.5">
+            <div className="flex items-center gap-1.5 mb-2">
               <span className="text-xs font-mono font-bold text-[#00c076] px-1.5 py-0.5 rounded bg-[#00c076]/10 border border-[#00c076]/20">
                 BULLISH
               </span>
             </div>
 
             {/* Tiny forecast chart */}
-            <div className="h-[76px] w-full mb-3">
+            <div className="h-[56px] w-full mb-2">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={aiForecastData}>
                   <defs>
@@ -421,19 +455,19 @@ const Dashboard: React.FC = () => {
             </div>
 
             {/* Key factors */}
-            <div>
-              <span className="text-[9px] text-slate-500 uppercase tracking-wider font-mono block mb-1.5">Key Factors</span>
-              <div className="space-y-1 text-[10px] text-slate-300">
+            <div className="border-t border-white/[0.04] pt-2">
+              <span className="text-[9px] text-slate-500 uppercase tracking-wider font-mono block mb-1">Key Factors</span>
+              <div className="space-y-0.5 text-[10px] text-slate-300">
                 <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#00c076]" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#00c076] shrink-0" />
                   <span>Strong global cues</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#00c076]" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#00c076] shrink-0" />
                   <span>RBI policy support</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#00c076]" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#00c076] shrink-0" />
                   <span>Earnings optimism</span>
                 </div>
               </div>

@@ -3,20 +3,27 @@ import { motion } from 'framer-motion';
 
 interface SentimentGaugeProps {
   value: number; // 0-100
-  label: string;
+  label?: string;
+  lowLabel?: string;
+  highLabel?: string;
   size?: number;
   className?: string;
+  hideLabels?: boolean;
+  hideValueText?: boolean;
 }
 
 /**
- * A semicircle gauge showing market sentiment from Extreme Fear (0) to Extreme Greed (100).
- * Uses a gradient from red → amber → green and an animated needle.
+ * A semicircle gauge showing market sentiment.
  */
 export const SentimentGauge: React.FC<SentimentGaugeProps> = ({
   value,
   label,
+  lowLabel = 'Fear',
+  highLabel = 'Greed',
   size = 200,
   className = '',
+  hideLabels = false,
+  hideValueText = false,
 }) => {
   const clampedValue = Math.min(100, Math.max(0, value));
   // Map 0-100 to -90° to 90° for the needle
@@ -144,30 +151,34 @@ export const SentimentGauge: React.FC<SentimentGaugeProps> = ({
         <circle cx={cx} cy={cy} r={2.5} fill="#0a0e17" />
 
         {/* Value text */}
-        <text
-          x={cx}
-          y={cy + 22}
-          textAnchor="middle"
-          fill={color}
-          fontSize="24"
-          fontWeight="800"
-          fontFamily="Inter, sans-serif"
-        >
-          {clampedValue}
-        </text>
+        {!hideValueText && (
+          <text
+            x={cx}
+            y={cy + 22}
+            textAnchor="middle"
+            fill={color}
+            fontSize="24"
+            fontWeight="800"
+            fontFamily="Inter, sans-serif"
+          >
+            {clampedValue}
+          </text>
+        )}
       </svg>
 
       {/* Labels below gauge */}
-      <div className="flex items-center justify-between w-full px-4 -mt-1">
-        <span className="text-[9px] text-red-400/60 font-medium">Fear</span>
-        <span
-          className="text-xs font-bold"
-          style={{ color }}
-        >
-          {label || getLabel(clampedValue)}
-        </span>
-        <span className="text-[9px] text-emerald-400/60 font-medium">Greed</span>
-      </div>
+      {!hideLabels && (
+        <div className="flex items-center justify-between w-full px-4 -mt-1 select-none">
+          <span className="text-[9px] text-slate-500 font-medium">{lowLabel}</span>
+          <span
+            className="text-xs font-bold"
+            style={{ color }}
+          >
+            {label || getLabel(clampedValue)}
+          </span>
+          <span className="text-[9px] text-slate-500 font-medium">{highLabel}</span>
+        </div>
+      )}
     </div>
   );
 };

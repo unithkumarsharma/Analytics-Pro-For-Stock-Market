@@ -104,11 +104,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle, onMobileC
       </AnimatePresence>
 
       <motion.aside
-        className="fixed top-0 left-0 h-full z-50 flex flex-col bg-[#0b0d14] border-r border-white/[0.08] transition-all duration-300 ease-in-out font-sans select-none"
-        style={{ width: collapsed && !isMobile ? 72 : 260 }}
+        className="fixed top-0 left-0 h-full z-50 flex flex-col bg-[#0d0f14] border-r border-[#1e2130] transition-all duration-300 ease-in-out font-sans select-none"
+        style={{ width: collapsed && !isMobile ? 72 : 220 }}
       >
         {/* Logo */}
-        <div className="h-16 flex items-center px-5 border-b border-white/[0.08] shrink-0">
+        <div className="h-16 flex items-center px-5 border-b border-[#1e2130] shrink-0">
           <div className="flex items-center gap-3 overflow-hidden">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-blue-400 flex items-center justify-center shrink-0">
               <Activity className="w-4 h-4 text-white" />
@@ -153,12 +153,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle, onMobileC
                           relative flex items-center gap-2.5 px-3 py-2 rounded-md
                           transition-all duration-150 group text-xs
                           ${isActive
-                            ? 'bg-blue-600/10 text-blue-400 font-semibold'
+                            ? 'bg-[#1a3a6b] text-white font-semibold border-l-[3px] border-[#3b82f6] rounded-r-md rounded-l-none pl-2'
                             : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.03]'}
                         `}
                       >
                         {isActive && (
-                          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-4 bg-blue-500 rounded-full" />
+                          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-4 bg-[#3b82f6] rounded-full hidden" />
                         )}
 
                         <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-blue-400' : 'text-slate-500 group-hover:text-slate-300'}`} />

@@ -46,7 +46,7 @@ export const TopBar: React.FC<TopBarProps> = ({ onNotificationClick }) => {
   ];
 
   return (
-    <header className="border-b border-white/[0.08] bg-[#0c0e14] z-30 shrink-0">
+    <header className="border-b border-[#1e2130] bg-[#0d0f14] z-30 shrink-0">
       {/* Row 1: Search & Controls */}
       <div className="h-14 flex items-center justify-between px-4 lg:px-6">
         {/* Search Input */}
@@ -55,14 +55,14 @@ export const TopBar: React.FC<TopBarProps> = ({ onNotificationClick }) => {
           <input
             type="text"
             placeholder="Search any symbol, company or index...   ⌘K"
-            className="w-full bg-[#161a25] border border-white/[0.06] hover:border-white/10 focus:border-blue-500/50 rounded-lg pl-9 pr-4 py-1.5 text-xs text-slate-200 placeholder:text-slate-500 focus:outline-none transition-all font-mono"
+            className="w-full bg-[#141720] border border-[#1e2130] hover:border-white/10 focus:border-blue-500/50 rounded-lg pl-9 pr-4 py-1.5 text-xs text-slate-200 placeholder:text-slate-500 focus:outline-none transition-all font-mono"
           />
         </div>
 
         {/* Action Controls */}
         <div className="flex items-center gap-3.5">
           {/* Theme switcher */}
-          <div className="flex items-center gap-1 bg-[#161a25] border border-white/[0.06] rounded-full p-0.5 select-none">
+          <div className="flex items-center gap-1 bg-[#141720] border border-[#1e2130] rounded-full p-0.5 select-none">
             <button
               onClick={() => setTheme('light')}
               className={`p-1 rounded-full transition-colors ${
@@ -82,14 +82,14 @@ export const TopBar: React.FC<TopBarProps> = ({ onNotificationClick }) => {
           </div>
 
           {/* Quick Portfolio/Briefcase icon */}
-          <button className="p-2 rounded-lg bg-[#161a25] border border-white/[0.06] text-slate-400 hover:text-white hover:bg-white/[0.02] transition-colors cursor-pointer">
+          <button className="p-2 rounded-lg bg-[#141720] border border-[#1e2130] text-slate-400 hover:text-white hover:bg-white/[0.02] transition-colors cursor-pointer">
             <Briefcase className="w-4 h-4" />
           </button>
 
           {/* Notifications Bell */}
           <button
             onClick={onNotificationClick}
-            className="relative p-2 rounded-lg bg-[#161a25] border border-white/[0.06] text-slate-400 hover:text-white hover:bg-white/[0.02] transition-colors cursor-pointer"
+            className="relative p-2 rounded-lg bg-[#141720] border border-[#1e2130] text-slate-400 hover:text-white hover:bg-white/[0.02] transition-colors cursor-pointer"
           >
             <Bell className="w-4 h-4" />
             {unreadCount > 0 && (
@@ -101,7 +101,7 @@ export const TopBar: React.FC<TopBarProps> = ({ onNotificationClick }) => {
 
           {/* Live Status indicator */}
           <div className="flex items-center gap-2 text-right">
-            <div className="w-1.5 h-1.5 rounded-full bg-[#00c076] live-dot animate-pulse" />
+            <div className="w-1.5 h-1.5 rounded-full bg-[#22c55e] live-dot animate-pulse" />
             <div className="leading-tight text-left">
               <span className="text-[10px] font-bold text-slate-400 block tracking-wide">Market Open</span>
               <span className="text-[9px] font-mono text-slate-500">{formatISTTime(time)} IST</span>
@@ -110,13 +110,13 @@ export const TopBar: React.FC<TopBarProps> = ({ onNotificationClick }) => {
         </div>
       </div>
 
-      {/* Row 2: Live Index Ticker */}
-      <div className="h-9 bg-[#11131c] border-t border-white/[0.04] flex items-center px-4 lg:px-6 gap-6 overflow-x-auto no-scrollbar scroll-smooth">
-        {tickerData.map((t) => (
-          <div key={t.symbol} className="flex items-center gap-2 shrink-0 text-[10px] font-mono select-none">
-            <span className="text-slate-400 font-semibold">{t.symbol}</span>
-            <span className="text-slate-200 font-bold">{t.value}</span>
-            <span className={`flex items-center gap-0.5 font-bold ${t.isUp ? 'text-[#00c076]' : 'text-[#ff4d4f]'}`}>
+      {/* Row 2: Live Index Ticker with separators */}
+      <div className="h-9 bg-[#0d0f14] border-t border-[#1e2130] flex items-center px-4 lg:px-6 gap-6 overflow-x-auto no-scrollbar scroll-smooth">
+        {tickerData.map((t, idx) => (
+          <div key={t.symbol} className={`flex items-center gap-2 shrink-0 text-[10px] font-mono select-none ${idx < tickerData.length - 1 ? 'border-r border-[#1e2130] pr-6' : ''}`}>
+            <span className="text-white font-semibold">{t.symbol}</span>
+            <span className="text-slate-400 font-bold">{t.value}</span>
+            <span className={`flex items-center gap-0.5 font-bold ${t.isUp ? 'text-[#22c55e]' : 'text-[#ef4444]'}`}>
               {t.isUp ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
               {t.change}
             </span>

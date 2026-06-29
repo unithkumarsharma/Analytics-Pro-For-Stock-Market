@@ -47,7 +47,7 @@ export const MainLayout: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0e17] text-white grid-bg noise-overlay relative">
+    <div className="min-h-screen bg-[#0d0f14] text-white grid-bg noise-overlay relative">
       {/* Sidebar */}
       <Sidebar
         collapsed={isMobile ? !mobileMenuOpen : sidebarCollapsed}
@@ -60,7 +60,7 @@ export const MainLayout: React.FC = () => {
       <div
         className="transition-all duration-300"
         style={{
-          marginLeft: isMobile ? 0 : sidebarCollapsed ? 72 : 260,
+          marginLeft: isMobile ? 0 : sidebarCollapsed ? 72 : 220,
         }}
       >
         <TopBar
@@ -68,7 +68,7 @@ export const MainLayout: React.FC = () => {
           onNotificationClick={() => setNotificationPanelOpen(!notificationPanelOpen)}
         />
 
-        <main className="p-4 lg:p-6 min-h-[calc(100vh-64px)]">
+        <main className="p-[24px] min-h-[calc(100vh-64px)] overflow-y-auto">
           <Outlet />
         </main>
       </div>
